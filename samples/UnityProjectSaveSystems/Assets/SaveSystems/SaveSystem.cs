@@ -8,13 +8,10 @@ namespace SavesAPI
         public string FolderPath { get; private set; }
         public string FilesPrefix { get; private set; }
 
-        protected bool syncWebGL;
-
-        public SaveSystem(string folderPath, string filesPrefix, bool syncWebGL = false)
+        public SaveSystem(string folderPath, string filesPrefix)
         {
             FolderPath = folderPath;
             FilesPrefix = filesPrefix;
-            this.syncWebGL = syncWebGL;
         }
 
         public abstract void Save(string filename, T toSave);
@@ -22,7 +19,7 @@ namespace SavesAPI
         public abstract T[] LoadDirectory();
 
         public void Delete(string filename) =>
-            StaticCommands.FileDelete(GeneratePath(filename), syncWebGL);
+            StaticCommands.FileDelete(GeneratePath(filename));
 
         public T LoadIfExists(string fileName)
         {

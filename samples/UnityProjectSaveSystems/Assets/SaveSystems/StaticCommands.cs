@@ -10,31 +10,20 @@ namespace SavesAPI
     {
         public static bool FileExists(string filePath) => File.Exists(filePath);
 
-        public static void FileDelete(string filePath, bool syncWebGL = false)
+        public static void FileDelete(string filePath)
         {
             if (FileExists(filePath))
             {
                 File.Delete(filePath);
-                if (syncWebGL)
-                    WebGLFileSync();
-            }
-        }
-
-        public static void MakeSureDirectoryExists(string folderPath, bool syncWebGL = false)
-        {
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-                if (syncWebGL)
-                    WebGLFileSync();
+                WebGLFileSync();
             }
         }
 
         public static T[] LoadDirectory<T>
-            (string folderPath, string filePrefix, Func<string, T> loadFunction, bool syncWebGL = false)
+            (string folderPath, string filePrefix, Func<string, T> loadFunction)
             where T : class, ISaveable
         {
-            MakeSureDirectoryExists(folderPath, syncWebGL);
+            MakeSureDirectoryExists(folderPath);
 
             var objectsLoaded = new List<T>();
             var filePaths = Directory.GetFiles(folderPath);
@@ -52,7 +41,7 @@ namespace SavesAPI
         public static string GeneratePathSubfolder(string mainFolderPath, string subfolderName)
             => $"{mainFolderPath}\\{subfolderName}\\";
 
-        public static void EncryptedSave<Type>(string path, Type objectToSave, bool syncWebGL = false)
+        public static void EncryptedSave<Type>(string path, Type objectToSave)
         {
             if (FileExists(path))
                 FileDelete(path);
@@ -63,8 +52,7 @@ namespace SavesAPI
             formatter.Serialize(stream, objectToSave);
             stream.Close(); // IMPORTANT
 
-            if (syncWebGL)
-                WebGLFileSync();
+            WebGLFileSync();
         }
 
         public static T EncryptedLoad<T>(string path)
@@ -77,17 +65,15 @@ namespace SavesAPI
             return data;
         }
 
-        public static T[] EncryptedLoadDirectory<T>(string folderPath, string filePrefix, bool syncWebGL = false)
+        public static T[] EncryptedLoadDirectory<T>(string folderPath, string filePrefix)
             where T : class, ISaveable =>
-            LoadDirectory(folderPath, filePrefix, EncryptedLoad<T>, syncWebGL);
+            LoadDirectory(folderPath, filePrefix, EncryptedLoad<T>);
 
-        public static void JsonSave(string path, object obj, bool syncWebGL = false)
+        public static void JsonSave(string path, object obj)
         {
             var toJson = JsonUtility.ToJson(obj, true);
             File.WriteAllText(path, toJson);
-
-            if (syncWebGL)
-                WebGLFileSync();
+            WebGLFileSync();
         }
 
         public static T JsonLoad<T>(string path)
@@ -97,14 +83,27 @@ namespace SavesAPI
             return JsonUtility.FromJson<T>(raw);
         }
 
-        public static T[] JsonLoadDirectory<T>(string folderPath, string filePrefix, bool syncWebGL = false)
+        public static T[] JsonLoadDirectory<T>(string folderPath, string filePrefix)
             where T : class, ISaveable =>
-            LoadDirectory(folderPath, filePrefix, JsonLoad<T>, syncWebGL);
+            LoadDirectory(folderPath, filePrefix, JsonLoad<T>);
+
+        /// <summary>
+        /// Creates a directory in a chosen path if it does not exist
+        /// </summary>
+        /// <param name="dirPath">The patch of the directory</param>
+        private static void MakeSureDirectoryExists(string dirPath)
+        {
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+                WebGLFileSync();
+            }
+        }
 
         /// <summary>
         /// Calls the file sync function in WebGL
         /// </summary>
-        public static void WebGLFileSync()
+        private static void WebGLFileSync()
         {
 #if UNITY_WEBGL
         Application.ExternalEval("_JS_FileSystem_Sync();");

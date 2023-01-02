@@ -4,17 +4,17 @@
     {
         public override string FileType => "json";
 
-        public JsonSaveSystem(string folderPath, string filesPrefix, bool syncWebGL = false)
-            : base(folderPath, filesPrefix, syncWebGL)
+        public JsonSaveSystem(string folderPath, string filesPrefix)
+            : base(folderPath, filesPrefix)
         { }
         
         public override void Save(string fileName, T toSave) =>
-            StaticCommands.JsonSave(GeneratePath(fileName), toSave, syncWebGL);
+            StaticCommands.JsonSave(GeneratePath(fileName), toSave);
 
         public override T Load(string fileName) =>
             StaticCommands.JsonLoad<T>(GeneratePath(fileName));
 
         public override T[] LoadDirectory() =>
-            StaticCommands.JsonLoadDirectory<T>(FolderPath, FilesPrefix, syncWebGL);
+            StaticCommands.JsonLoadDirectory<T>(FolderPath, FilesPrefix);
     }
 }
