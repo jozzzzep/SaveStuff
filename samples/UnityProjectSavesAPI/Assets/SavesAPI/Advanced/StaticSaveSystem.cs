@@ -9,7 +9,7 @@ namespace SavesAPI.Advanced
     /// NOT RECOMMENDED TO USE DIRECTLY - Read documentation and examples here:
     /// https://github.com/jozzzzep/SavesAPI
 
-    /// - Methods ---------------------------
+    /// - Static Methods --------------------
     ///    FileExists(...)                - Checks if a file exists in a path
     ///    FileDelete(...)                - Deletes a file from a path only if it exists
     ///    LoadDirectory<T>(...)          - Loads all saveable files from a chosen directory, if empty - list count will be 0
