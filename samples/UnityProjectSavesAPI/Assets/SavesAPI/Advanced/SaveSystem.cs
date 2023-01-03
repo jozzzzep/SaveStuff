@@ -55,6 +55,7 @@ namespace SavesAPI.Advanced
         {
             DirectoryPath = directoryPath;
             FilesPrefix = filesPrefix;
+            StaticSaveSystem.MakeSureDirectoryExists(directoryPath);
         }
 
         /// <summary>

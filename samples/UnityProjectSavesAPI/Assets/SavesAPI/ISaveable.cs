@@ -9,6 +9,7 @@ namespace SavesAPI
 
     /// <summary>
     /// Interface for creating a saveable class for save systems
+    /// <para>Make sure to add attribute <see cref="[System.Serializable]"/></para>
     /// </summary>
     public interface ISaveable
     {

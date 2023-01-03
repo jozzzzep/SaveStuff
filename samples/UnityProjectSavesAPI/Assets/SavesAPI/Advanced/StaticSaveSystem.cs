@@ -165,17 +165,10 @@ namespace SavesAPI.Advanced
             LoadDirectory(directoryPath, filePrefix, JsonLoad<T>);
 
         /// <summary>
-        /// Will return the last time a file has been modified or created
-        /// </summary>
-        /// <param name="path">Path of file</param>
-        /// <returns></returns>
-        private static DateTime GetLastModificationTime(string path) => File.GetLastWriteTime(path);
-
-        /// <summary>
         /// Creates a directory in a chosen path if it does not exist
         /// </summary>
         /// <param name="dirPath">The path of the directory</param>
-        private static void MakeSureDirectoryExists(string dirPath)
+        public static void MakeSureDirectoryExists(string dirPath)
         {
             if (!Directory.Exists(dirPath))
             {
@@ -183,6 +176,13 @@ namespace SavesAPI.Advanced
                 WebGLFileSync();
             }
         }
+
+        /// <summary>
+        /// Will return the last time a file has been modified or created
+        /// </summary>
+        /// <param name="path">Path of file</param>
+        /// <returns></returns>
+        private static DateTime GetLastModificationTime(string path) => File.GetLastWriteTime(path);
 
         /// <summary>
         /// Calls the file sync function in WebGL

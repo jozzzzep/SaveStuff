@@ -10,7 +10,9 @@ namespace SavesAPI
 
     /// <summary>
     /// A base class for a saveable classes to use in <see cref="SlotSaveSystem{T}"/>
+    /// <para>Make sure to add attribute <see cref="System.Serializable"/></para>
     /// </summary>
+    [Serializable]
     public class SaveSlot : ISaveable
     {
         /// <summary>
