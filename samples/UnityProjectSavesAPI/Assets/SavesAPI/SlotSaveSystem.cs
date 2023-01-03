@@ -3,67 +3,74 @@ using SavesAPI.Advanced;
 
 namespace SavesAPI
 {
-    /// - Properties -----------
-    ///     SlotsAmount        - Amount of slots in the slot based save system
-    ///     FileType           - The file type of the saveable files
-    ///     DirectoryPath      - The directory path the save system saves to and loads from
-    ///     FilesPrefix        - The prefix of every file created with the save system
-    /// - Methods --------------
-    ///     Save(...)          - Saves an object to a file
-    ///     Delete(...)        - Deletes a saved file
-    ///     Load(...)          - Loads an object from a file
-    ///     LoadIfExists(...)  - Loads a file only if it exits
-    ///     LoadSlots()        - Loads all slots and returns the objects they store or a null array slot
-    ///     SlotIsEmpty(...)   - 
-    /// ------------------------
+    /// - Properties ---------------
+    ///     SlotsAmount          - Amount of slots in the slot based save system
+    ///     FileType             - The file type of the saveable files
+    ///     DirectoryPath        - The directory path the save system saves to and loads from
+    ///     FilesPrefix          - The prefix of every file created with the save system
+    ///     
+    /// - Methods ------------------
+    ///     Save(...)            - Saves an object to a save slot
+    ///     Delete(...)          - Deletes a saved slot
+    ///     Load(...)            - Loads a saveable object from a save slot
+    ///     LoadIfExists(...)    - Loads a save slot only if it constains data
+    ///     LoadSlots()          - Loads all slots and returns an array with an object they store or a null in empty slots
+    ///     SlotIsEmpty(...)     - Checks if a slot is currently not storing data
+    ///     
+    /// - Static Methods -----------
+    ///     EmptySlotIndex(...)  - Returns the first empty slot index, or null if there is none
+    ///     IndexToFileName(...) - Takes a slot index and returns a file-name
 
     /// <summary>
     /// A slot manager and sorter for a save system with fixed amount of slot
     /// </summary>
-    /// <typeparam name="T">A saveable type class</typeparam>
-    public class SlotSaveSystem<T> where T : SaveSlot
+    /// <typeparam name="T">A <see cref="SaveSlot"/> type class</typeparam>
+    public class SlotSaveSystem<T> : ManagedSaveSystem<T> where T : SaveSlot
     {
-        /// <summary>
-        /// The internal save system, so you can choose which save system you want to has slot management
-        /// </summary>
-        private SaveSystem<T> internalSaveSystem;
-
         /// <summary>
         /// Amount of slots in save system
         /// </summary>
         public int SlotsAmount { get; private set; }
-
-        /// <summary>
-        /// File type of saveable files
-        /// </summary>
-        public string FileType => internalSaveSystem.FileType;
-
-        /// <summary>
-        /// The directory path the save system saves-to and loads-from
-        /// </summary>
-        public string DirectoryPath => internalSaveSystem.DirectoryPath;
-
-        /// <summary>
-        /// The prefix of every file created with the save system
-        /// </summary>
-        public string FilesPrefix => internalSaveSystem.FilesPrefix;
-
+        
         /// <summary>
         /// A constructor for creating a slot based save system
         /// </summary>
         /// <param name="slotAmount"> Amount of slots in save system</param>
         /// <param name="internalSaveSystem">A sub-save-system for saving</param>
         public SlotSaveSystem(int slotAmount, SaveSystem<T> internalSaveSystem)
-        {
+            : base(internalSaveSystem) =>
             SlotsAmount = slotAmount;
-            this.internalSaveSystem = internalSaveSystem;
-        }
 
-        public void Delete(int slot) => internalSaveSystem.Delete(SaveSlot.SlotToFileName(slot));
-        public void Save(T toSave) => internalSaveSystem.Save(toSave.Name, toSave);
-        public T Load(int slot) => internalSaveSystem.Load(SaveSlot.SlotToFileName(slot));
-        public T LoadIfExists(int slot) => internalSaveSystem.LoadIfExists(SaveSlot.SlotToFileName(slot));
+        /// <summary>
+        /// Deletes a saved slot
+        /// </summary>
+        /// <param name="slot">Slot index</param>
+        public void Delete(int slot) => internalSaveSystem.Delete(IndexToFileName(slot));
 
+        /// <summary>
+        /// Saves an object to a save slot
+        /// </summary>
+        /// <param name="toSave">Object to save</param>
+        public void Save(T toSave) => internalSaveSystem.Save(toSave);
+
+        /// <summary>
+        /// Loads a saveable object from a save slot
+        /// </summary>
+        /// <param name="slot">Slot index</param>
+        /// <returns></returns>
+        public T Load(int slot) => internalSaveSystem.Load(IndexToFileName(slot));
+
+        /// <summary>
+        /// Loads a save slot only if it constains data
+        /// </summary>
+        /// <param name="slot">Slot index</param>
+        /// <returns></returns>
+        public T LoadIfExists(int slot) => internalSaveSystem.LoadIfExists(IndexToFileName(slot));
+
+        /// <summary>
+        /// Loads all slots and returns an array with the objects they store or a null in empty slots
+        /// </summary>
+        /// <returns></returns>
         public T[] LoadSlots()
         {
             var filesList = internalSaveSystem.LoadDirectory().ToList();
@@ -77,9 +84,18 @@ namespace SavesAPI
             return slots;
         }
         
-        public bool SlotIsEmpty(int slot) => !internalSaveSystem.FileExists(SaveSlot.SlotToFileName(slot));
-        public bool FileSlotExists(int slot) => !SlotIsEmpty(slot);
+        /// <summary>
+        /// Checks if a slot is currently not storing data
+        /// </summary>
+        /// <param name="slot">Slot index</param>
+        /// <returns></returns>
+        public bool SlotIsEmpty(int slot) => !internalSaveSystem.FileExists(IndexToFileName(slot));
 
+        /// <summary>
+        /// When given array of slots:
+        /// </summary>
+        /// <param name="slots"></param>
+        /// <returns>The first empty slot index, or null if there is not an empty slot</returns>
         public static int? EmptySlotIndex(T[] slots)
         {
             for (int i = 0; i < slots.Length; i++)
@@ -87,5 +103,12 @@ namespace SavesAPI
                     return i;
             return null;
         }
+
+        /// <summary>
+        /// Takes a slot index and returns a file-name
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        public static string IndexToFileName(int slot) => "slot_" + (slot + 1).ToString();
     }
 }

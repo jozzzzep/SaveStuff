@@ -62,7 +62,7 @@ namespace SavesAPI.Advanced
         /// </summary>
         /// <param name="filename">The name of the file</param>
         /// <param name="toSave">Object to save</param>
-        public abstract void Save(string filename, T toSave);
+        public abstract void Save(T toSave);
 
         /// <summary>
         /// Loads an object from a file

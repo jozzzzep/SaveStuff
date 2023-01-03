@@ -7,6 +7,7 @@ namespace SavesAPI
     ///     FileType           - The file type of the saveable files
     ///     DirectoryPath      - The directory path the save system saves to and loads from
     ///     FilesPrefix        - The prefix of every file created with the save system
+    ///     
     /// - Methods --------------
     ///     Save(...)          - Saves an object to a file
     ///     Delete(...)        - Deletes a saved file
@@ -14,7 +15,6 @@ namespace SavesAPI
     ///     LoadIfExists(...)  - Loads a file only if it exits
     ///     LoadDirectory()    - Loads all saved files and returns the objects they store
     ///     FileExists(...)    - Checks if there is an existing saved file with a chosen name
-    /// ------------------------
 
     /// <summary>
     /// A save system that saves an object to an encrypted file, and decrypts it when loading
@@ -35,8 +35,8 @@ namespace SavesAPI
             : base(directoryPath, filesPrefix) => 
             this.fileType = fileType;
 
-        public override void Save(string fileName, T toSave) =>
-            StaticSaveSystem.EncryptedSave(GeneratePath(fileName), toSave);
+        public override void Save(T toSave) =>
+            StaticSaveSystem.EncryptedSave(GeneratePath(toSave.Name), toSave);
 
         public override T Load(string fileName) =>
             StaticSaveSystem.EncryptedLoad<T>(GeneratePath(fileName));

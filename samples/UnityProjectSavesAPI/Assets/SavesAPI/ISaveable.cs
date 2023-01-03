@@ -2,6 +2,11 @@
 
 namespace SavesAPI
 {
+    /// - Properties ---
+    ///     Name       - The name of the saveable Object
+    ///     LastUsage  - The last time the save has been created or modified
+    /// ----------------
+
     /// <summary>
     /// Interface for creating a saveable class for save systems
     /// </summary>
