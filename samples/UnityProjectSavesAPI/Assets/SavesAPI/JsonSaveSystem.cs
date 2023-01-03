@@ -1,20 +1,48 @@
-﻿namespace SavesAPI
+﻿using System.Collections.Generic;
+using SavesAPI.Advanced;
+
+namespace SavesAPI
 {
+    /// - Properties -----------
+    ///     FileType           - The file type of the saveable files - Always "json"
+    ///     DirectoryPath      - The directory path the save system saves to and loads from
+    ///     FilesPrefix        - The prefix of every file created with the save system
+    /// - Methods --------------
+    ///     Save(...)          - Saves an object to a file
+    ///     Delete(...)        - Deletes a saved file
+    ///     Load(...)          - Loads an object from a file
+    ///     LoadIfExists(...)  - Loads a file only if it exits
+    ///     LoadDirectory()    - Loads all saved files and returns the objects they store
+    ///     FileExists(...)    - Checks if there is an existing saved file with a chosen name
+    /// ------------------------
+
+    /// <summary>
+    /// A save system that saves an object to a file and serializes it to json format
+    /// </summary>
+    /// <typeparam name="T">A saveable type class</typeparam>
     public class JsonSaveSystem<T> : SaveSystem<T> where T : class, ISaveable
     {
+        /// <summary>
+        /// The file type is "json" in the class <see cref="JsonSaveSystem{T}"/>
+        /// </summary>
         public override string FileType => "json";
 
-        public JsonSaveSystem(string folderPath, string filesPrefix)
-            : base(folderPath, filesPrefix)
+        /// <summary>
+        /// A constructor for creating a json save system
+        /// </summary>
+        /// <param name="directoryPath">The directory path the save system saves-to and loads-from</param>
+        /// <param name="filesPrefix">The prefix of every file created with the save system</param>
+        public JsonSaveSystem(string directoryPath, string filesPrefix)
+            : base(directoryPath, filesPrefix)
         { }
         
         public override void Save(string fileName, T toSave) =>
-            StaticCommands.JsonSave(GeneratePath(fileName), toSave);
+            StaticSaveSystem.JsonSave(GeneratePath(fileName), toSave);
 
         public override T Load(string fileName) =>
-            StaticCommands.JsonLoad<T>(GeneratePath(fileName));
+            StaticSaveSystem.JsonLoad<T>(GeneratePath(fileName));
 
-        public override T[] LoadDirectory() =>
-            StaticCommands.JsonLoadDirectory<T>(FolderPath, FilesPrefix);
+        public override List<T> LoadDirectory() =>
+            StaticSaveSystem.JsonLoadDirectory<T>(DirectoryPath, FilesPrefix);
     }
 }

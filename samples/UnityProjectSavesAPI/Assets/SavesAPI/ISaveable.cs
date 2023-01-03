@@ -2,10 +2,13 @@
 
 namespace SavesAPI
 {
+    /// <summary>
+    /// Interface for creating a saveable class for save systems
+    /// </summary>
     public interface ISaveable
     {
         /// <summary>
-        /// The name of the savable Object
+        /// The name of the saveable Object
         /// </summary>
         public string Name { get; }
 
