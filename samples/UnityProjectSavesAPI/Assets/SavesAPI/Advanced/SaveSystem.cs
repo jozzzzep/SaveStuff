@@ -61,7 +61,6 @@ namespace SavesAPI.Advanced
         /// <summary>
         /// Saves an object to a file
         /// </summary>
-        /// <param name="filename">The name of the file</param>
         /// <param name="toSave">Object to save</param>
         public abstract void Save(T toSave);
 
@@ -77,6 +76,7 @@ namespace SavesAPI.Advanced
         /// </summary>
         /// <returns></returns>
         public abstract List<T> LoadDirectory();
+
 
         /// <summary>
         /// Deletes a saved file
