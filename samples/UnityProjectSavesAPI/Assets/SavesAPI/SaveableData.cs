@@ -1,48 +1,54 @@
 ﻿using SavesAPI.Advanced;
 using System;
+using Unity.VisualScripting;
 
 namespace SavesAPI
 {
     [Serializable]
-    public class SaveableData<T> where T : class, ISaveable
+    public abstract class SaveableObject : ISaveable
     {
-        private T data;
+        abstract public string Name { get; }
+        abstract public SavingMethod SavingMethod { get; }
+
+        public string FilePath => SaveableDataManager.GeneratePath(this);
+        public string FileType => SavingMethod == SavingMethod.Encrypted ? "data" : "json";
+
+        public DateTime LastUsage { get; set; }
 
         public static string ParentDirectoryPath => SaveableDataManager.DirectoryPath;
         public static string FilePrefix => SaveableDataManager.FilesPrefix;
 
-        public string FilePath => SaveableDataManager.GeneratePath(this);
+        public bool FileExists() =>
+            StaticSaveSystem.FileExists(FilePath);
+    }
 
-        public string FileType => SavingMethod == SavingMethod.Encrypted ? "data" : "json";
-
-        public SavingMethod SavingMethod { get; private set; }
+    public class ObjectSaver<T> where T : SaveableObject
+    {
+        private T data;
 
         public T Data 
         {
             get => data ?? Load();
             set
             {
+                
                 data = value;
                 Save();
             }
         }
 
-        public SaveableData(T data, SavingMethod savingMethod = SavingMethod.Json)
-        {
-            this.data = data;
-            SavingMethod = savingMethod;
-        }
+        public ObjectSaver(T data) =>
+            Data = data;
  
         public void Save() => 
             SaveableDataManager.Save(this);
 
-        public T Load() => 
-            data = SaveableDataManager.Load(this);
+        public T Load(T data) => 
+            SaveableDataManager.Load(data);
 
-        public bool FileExists() =>
-            StaticSaveSystem.FileExists(FilePath);
+        public T Load() =>
+            data = Load(data);
 
-        public void DeleteSavedFile() =>
-            StaticSaveSystem.FileDelete(FilePath);
+        public T LoadIfExist
     }
 }
