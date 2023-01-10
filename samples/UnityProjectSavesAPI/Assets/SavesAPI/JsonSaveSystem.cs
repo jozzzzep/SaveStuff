@@ -3,18 +3,22 @@ using SavesAPI.Advanced;
 
 namespace SavesAPI
 {
-    /// - Properties -----------
-    ///     FileType           - The file type of the saveable files - Always "json"
-    ///     DirectoryPath      - The directory path the save system saves to and loads from
-    ///     FilesPrefix        - The prefix of every file created with the save system
-    ///     
-    /// - Methods --------------
-    ///     Save(...)          - Saves an object to a file
-    ///     Delete(...)        - Deletes a saved file
-    ///     Load(...)          - Loads an object from a file
-    ///     LoadIfExists(...)  - Loads a file only if it exits
-    ///     LoadDirectory()    - Loads all saved files and returns the objects they store
-    ///     FileExists(...)    - Checks if there is an existing saved file with a chosen name
+    /*/
+     * 
+     *  - Properties -----------
+     *      FileType           - The file type of the saveable files - Always "json"
+     *      DirectoryPath      - The directory path the save system saves to and loads from
+     *      FilesPrefix        - The prefix of every file created with the save system
+     *      
+     *  - Methods --------------
+     *      Save(...)          - Saves an object to a file
+     *      Delete(...)        - Deletes a saved file
+     *      Load(...)          - Loads an object from a file
+     *      LoadIfExists(...)  - Loads a file only if it exits
+     *      LoadDirectory()    - Loads all saved files and returns the objects they store
+     *      FileExists(...)    - Checks if there is an existing saved file with a chosen name
+     *      
+    /*/
 
     /// <summary>
     /// A save system that saves an object to a file and serializes it to json format
@@ -23,7 +27,7 @@ namespace SavesAPI
     public class JsonSaveSystem<T> : SaveSystem<T> where T : class, ISaveable
     {
         /// <summary>
-        /// The file type is "json" in the class <see cref="JsonSaveSystem{T}"/>
+        /// The file type is always "json" in the class <see cref="JsonSaveSystem{T}"/>
         /// </summary>
         public override string FileType => "json";
 
@@ -37,12 +41,12 @@ namespace SavesAPI
         { }
         
         public override void Save(T toSave) =>
-            StaticSaveSystem.JsonSave(GeneratePath(toSave.Name), toSave);
+            StaticCommands.JsonSave(GeneratePath(toSave.Name), toSave);
 
         public override T Load(string fileName) =>
-            StaticSaveSystem.JsonLoad<T>(GeneratePath(fileName));
+            StaticCommands.JsonLoad<T>(GeneratePath(fileName));
 
         public override List<T> LoadDirectory() =>
-            StaticSaveSystem.JsonLoadDirectory<T>(DirectoryPath, FilesPrefix);
+            StaticCommands.JsonLoadDirectory<T>(DirectoryPath, FilesPrefix);
     }
 }

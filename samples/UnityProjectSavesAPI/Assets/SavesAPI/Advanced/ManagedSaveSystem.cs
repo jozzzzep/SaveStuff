@@ -1,18 +1,18 @@
 ﻿namespace SavesAPI.Advanced
 {
-    /// WARNING: use only to inherit and create custom managed save system
-    /// 
-    /// - Members ----------------
-    /// 
-    ///     FileType           - The file type of the saveable files
-    ///     DirectoryPath      - The directory path the save system saves to and loads from
-    ///     FilesPrefix        - The prefix of every file created with the save system <summary>
-    ///     
-    /// - Protected members ------ (for child classes when inheriting)
-    /// 
-    ///     internalSaveSystem - The internal save system
-    /// 
-    /// --------------------------
+    /*/ 
+     * 
+     *  - Members ----------------
+     *  
+     *      FileType           - The file type of the saveable files
+     *      DirectoryPath      - The directory path the save system saves to and loads from
+     *      FilesPrefix        - The prefix of every file created with the save system <summary>
+     *      
+     *  - Protected members ------ (for child classes when inheriting)
+     *  
+     *      internalSaveSystem - The internal save system
+     *      
+    /*/
 
     /// <summary>
     /// A base class for creating managed save systems
@@ -25,20 +25,18 @@
         /// </summary>
         protected SaveSystem<T> internalSaveSystem;
 
-        /// <summary>
-        /// File type of saveable files
-        /// </summary>
+
+        /// <inheritdoc cref="SaveSystem{T}.FileType" />
         public string FileType => internalSaveSystem.FileType;
 
-        /// <summary>
-        /// The directory path the save system saves-to and loads-from
-        /// </summary>
+
+        /// <inheritdoc cref="SaveSystem{T}.DirectoryPath" />
         public string DirectoryPath => internalSaveSystem.DirectoryPath;
 
-        /// <summary>
-        /// The prefix of every file created with the save system
-        /// </summary>
+
+        /// <inheritdoc cref="SaveSystem{T}.FilesPrefix" />
         public string FilesPrefix => internalSaveSystem.FilesPrefix;
+
 
         /// <summary>
         /// The base constructor of a managed save system

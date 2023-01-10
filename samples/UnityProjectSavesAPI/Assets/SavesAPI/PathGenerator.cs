@@ -2,13 +2,17 @@
 
 namespace SavesAPI
 {
-    /// - Properties ----------------------------------------
-    ///    MainDirectoryPath                              - Default main directory path (great path for saving data)
-    ///    
-    /// - Methods ------------------------------------------
-    ///    GeneratePathFile()                             - Generates a path to a file
-    ///    GeneratePathDirectory(nameSubDir)              - Generate a path to a directory with the default main directory
-    ///    GeneratePathDirectory(pathMainDir, nameSubDir) - Generate a path to a directory with a custom main directory
+    /*/
+     * 
+     *  - Properties ----------------------------------------
+     *     MainDirectoryPath                              - Default main directory path (great path for saving data)
+     *     
+     *  - Methods ------------------------------------------
+     *     GeneratePathFile()                             - Generates a path to a file
+     *     GeneratePathDirectory(nameSubDir)              - Generate a path to a directory with the default main directory
+     *     GeneratePathDirectory(pathMainDir, nameSubDir) - Generate a path to a directory with a custom main directory
+     *     
+    /*/
 
     /// <summary>
     /// Static class with commands for generating a path to files and directories

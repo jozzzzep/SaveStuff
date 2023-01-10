@@ -2,14 +2,18 @@
 
 namespace SavesAPI
 {
-    /// - Properties ---
-    ///     Name       - The name of the saveable Object
-    ///     LastUsage  - The last time the save has been created or modified
-    /// ----------------
+    /*/ 
+     * 
+     *  -- Properties -----
+     *      Name       - The name of the saveable Object
+     *      LastUsage  - The last time the save has been created or modified
+     *  -------------------
+     *  
+    /*/
 
     /// <summary>
-    /// Interface for creating a saveable class for save systems
-    /// <para>Make sure to add attribute <see cref="[System.Serializable]"/></para>
+    /// Interface for creating a saveable class for save systems <br></br>
+    /// Make sure to add attribute <see cref="[System.Serializable]"/>
     /// </summary>
     public interface ISaveable
     {

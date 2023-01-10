@@ -2,28 +2,32 @@
 
 namespace SavesAPI.Advanced
 {
-    /// WARNING: use only to inherit and create custom save system
-    ///
-    /// - Members --------------
-    /// 
-    ///     DirectoryPath      - The directory path the save system saves to and loads from
-    ///     FilesPrefix        - The prefix of every file created with the save system
-    ///     Delete(...)        - Deletes a saved file
-    ///     LoadIfExists(...)  - Loads a file only if it exits
-    ///     FileExists(...)    - Checks if there is an existing saved file with a chosen name
-    /// 
-    /// - Abstract members ----- (implement when inheriting) 
-    /// 
-    ///     FileType           - The file type of the saveable files
-    ///     Save(...)          - Saves an object to a file
-    ///     Load(...)          - Loads an object from a file
-    ///     LoadDirectory()    - Loads all saved files and returns the objects they store
-    ///     
-    /// - Protected methods ---- (for child classes when inheriting)
-    /// 
-    ///     GeneratePath(...)  - Generates a path for a file based on a given file-name
-    ///     
-    /// ------------------------
+    /*/ 
+     *
+     *  WARNING: use only to inherit and create custom save system
+     * 
+     *  - Members --------------
+     *  
+     *      DirectoryPath      - The directory path the save system saves to and loads from
+     *      FilesPrefix        - The prefix of every file created with the save system
+     *      Delete(...)        - Deletes a saved file
+     *      LoadIfExists(...)  - Loads a file only if it exits
+     *      FileExists(...)    - Checks if there is an existing saved file with a chosen name
+     *  
+     *  - Abstract members ----- (implement when inheriting) 
+     *  
+     *      FileType           - The file type of the saveable files
+     *      Save(...)          - Saves an object to a file
+     *      Load(...)          - Loads an object from a file
+     *      LoadDirectory()    - Loads all saved files and returns the objects they store
+     *      
+     *  - Protected methods ---- (for child classes when inheriting)
+     *  
+     *      GeneratePath(...)  - Generates a path for a file based on a given file-name
+     *
+     *  ------------------------
+     *  
+    /*/
 
     /// <summary>
     /// A base class for a save system - WARNING: use only to inherit and create custom save system
@@ -37,7 +41,7 @@ namespace SavesAPI.Advanced
         public abstract string FileType { get; }
 
         /// <summary>
-        /// The directory path the save system saves to and loads from
+        /// The directory path the save system saves-to and loads-from
         /// </summary>
         public string DirectoryPath { get; private set; }
 
@@ -55,7 +59,7 @@ namespace SavesAPI.Advanced
         {
             DirectoryPath = directoryPath;
             FilesPrefix = filesPrefix;
-            StaticSaveSystem.MakeSureDirectoryExists(directoryPath);
+            StaticCommands.MakeSureDirectoryExists(directoryPath);
         }
 
         /// <summary>
@@ -83,7 +87,7 @@ namespace SavesAPI.Advanced
         /// </summary>
         /// <param name="filename"></param>
         public void Delete(string filename) =>
-            StaticSaveSystem.FileDelete(GeneratePath(filename));
+            StaticCommands.FileDelete(GeneratePath(filename));
 
         /// <summary>
         /// Loads a file only if it exits
@@ -103,7 +107,7 @@ namespace SavesAPI.Advanced
         /// <param name="fileName">The name of the file</param>
         /// <returns></returns>
         public bool FileExists(string fileName) =>
-            StaticSaveSystem.FileExists(GeneratePath(fileName));
+            StaticCommands.FileExists(GeneratePath(fileName));
 
         /// <summary>
         /// Generates a path for a file based on a given file-name

@@ -2,15 +2,19 @@
 
 namespace SavesAPI
 {
-    /// - Properties ---
-    ///     SlotIndex  - Index of the save slot inside a SlotSaveSystem
-    ///     Name       - The name of the file based on the slot index
-    ///     LastUsage  - The last time the save has been created or modified
-    /// ----------------
+    /*/
+     * 
+     *  - Properties ---
+     *      SlotIndex  - Index of the save slot inside a SlotSaveSystem
+     *      Name       - The name of the file based on the slot index
+     *      LastUsage  - The last time the save has been created or modified
+     *  ----------------
+     *  
+    /*/
 
     /// <summary>
-    /// A base class for a saveable classes to use in <see cref="SlotSaveSystem{T}"/>
-    /// <para>Make sure to add attribute <see cref="System.Serializable"/></para>
+    /// A base class for a saveable classes to use in <see cref="SlotSaveSystem{T}"/> <br></br>
+    /// Make sure to add attribute <see cref="System.Serializable"/>
     /// </summary>
     [Serializable]
     public class SaveSlot : ISaveable

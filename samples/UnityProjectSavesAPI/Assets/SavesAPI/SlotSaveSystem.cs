@@ -3,23 +3,27 @@ using SavesAPI.Advanced;
 
 namespace SavesAPI
 {
-    /// - Properties ---------------
-    ///     SlotsAmount          - Amount of slots in the slot based save system
-    ///     FileType             - The file type of the saveable files
-    ///     DirectoryPath        - The directory path the save system saves to and loads from
-    ///     FilesPrefix          - The prefix of every file created with the save system
-    ///     
-    /// - Methods ------------------
-    ///     Save(...)            - Saves an object to a save slot
-    ///     Delete(...)          - Deletes a saved slot
-    ///     Load(...)            - Loads a saveable object from a save slot
-    ///     LoadIfExists(...)    - Loads a save slot only if it constains data
-    ///     LoadSlots()          - Loads all slots and returns an array with an object they store or a null in empty slots
-    ///     SlotIsEmpty(...)     - Checks if a slot is currently not storing data
-    ///     
-    /// - Static Methods -----------
-    ///     EmptySlotIndex(...)  - Returns the first empty slot index, or null if there is none
-    ///     IndexToFileName(...) - Takes a slot index and returns a file-name
+    /*/
+     * 
+     *  - Properties ---------------
+     *      SlotsAmount          - Amount of slots in the slot based save system
+     *      FileType             - The file type of the saveable files
+     *      DirectoryPath        - The directory path the save system saves to and loads from
+     *      FilesPrefix          - The prefix of every file created with the save system
+     *      
+     *  - Methods ------------------
+     *      Save(...)            - Saves an object to a save slot
+     *      Delete(...)          - Deletes a saved slot
+     *      Load(...)            - Loads a saveable object from a save slot
+     *      LoadIfExists(...)    - Loads a save slot only if it constains data
+     *      LoadSlots()          - Loads all slots and returns an array with an object they store or a null in empty slots
+     *      SlotIsEmpty(...)     - Checks if a slot is currently not storing data
+     *      
+     *  - Static Methods -----------
+     *      EmptySlotIndex(...)  - Returns the first empty slot index, or null if there is none
+     *      IndexToFileName(...) - Takes a slot index and returns a file-name
+     *      
+    /*/
 
     /// <summary>
     /// A slot manager and sorter for a save system with fixed amount of slot

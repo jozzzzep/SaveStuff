@@ -6,27 +6,31 @@ using System;
 
 namespace SavesAPI.Advanced
 {
-    /// NOT RECOMMENDED TO USE DIRECTLY - Read documentation and examples here:
-    /// https://github.com/jozzzzep/SavesAPI
-
-    /// - Static Methods --------------------
-    ///    FileExists(...)                - Checks if a file exists in a path
-    ///    FileDelete(...)                - Deletes a file from a path only if it exists
-    ///    LoadDirectory<T>(...)          - Loads all saveable files from a chosen directory, if empty - list count will be 0
-    ///   --
-    ///    EncryptedSave<T>(...)          - Will save a saveable object to a file and encrypt it
-    ///    EncryptedLoad<T>(...)          - Will decrypt and load a saveable file
-    ///    EncryptedLoadDirectory<T>(...) - Will decrypt and load all saveable files in a chosen directory
-    ///   --
-    ///    JsonSave<T>(...)               - Will save a saveable object and serialize it to json format
-    ///    JsonLoad<T>(...)               - Will load a file and deserialize it from json to saveable type
-    ///    JsonLoadDirectory<T>(...)      - Will deserialize and load all saveable json files in a chosen directory
-    /// -------------------------------------
+    /*/ 
+     * 
+     * NOT RECOMMENDED TO USE DIRECTLY - Read documentation and examples here:
+     *  https://github.com/jozzzzep/SavesAPI
+     *  
+     *  - Static Methods --------------------
+     *     FileExists(...)                - Checks if a file exists in a path
+     *     FileDelete(...)                - Deletes a file from a path only if it exists
+     *     LoadDirectory<T>(...)          - Loads all saveable files from a chosen directory, if empty - list count will be 0
+     *    --
+     *     EncryptedSave<T>(...)          - Will save a saveable object to a file and encrypt it
+     *     EncryptedLoad<T>(...)          - Will decrypt and load a saveable file
+     *     EncryptedLoadDirectory<T>(...) - Will decrypt and load all saveable files in a chosen directory
+     *    --
+     *     JsonSave<T>(...)               - Will save a saveable object and serialize it to json format
+     *     JsonLoad<T>(...)               - Will load a file and deserialize it from json to saveable type
+     *     JsonLoadDirectory<T>(...)      - Will deserialize and load all saveable json files in a chosen directory
+     *  -------------------------------------
+     *  
+    /*/
 
     /// <summary>
     /// Static commands of the SavesAPI, not recommended to use manually
     /// </summary>
-    public static class StaticSaveSystem
+    public static class StaticCommands
     {
         /// <summary>
         /// Checks if a file exists in a path
@@ -82,8 +86,7 @@ namespace SavesAPI.Advanced
         public static void EncryptedSave<T>(string path, T objectToSave)
             where T : class, ISaveable
         {
-            if (FileExists(path))
-                FileDelete(path);
+            FileDelete(path);
 
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Create);
@@ -130,9 +133,7 @@ namespace SavesAPI.Advanced
         public static void JsonSave<T>(string path, T obj)
              where T : class, ISaveable
         {
-            if (FileExists(path))
-                FileDelete(path);
-
+            FileDelete(path);
             var toJson = JsonUtility.ToJson(obj, true);
             File.WriteAllText(path, toJson);
             WebGLFileSync();
