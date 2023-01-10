@@ -32,6 +32,11 @@ namespace SavesAPI
     public class SaveSlotManager<T> : ManagedSaveSystem<T> where T : SaveSlot
     {
         /// <summary>
+        /// Recent loaded slots
+        /// </summary>
+        public T[] LoadedSlots { get; set; }
+
+        /// <summary>
         /// Amount of slots in save system
         /// </summary>
         public int SlotsAmount { get; private set; }
@@ -42,8 +47,11 @@ namespace SavesAPI
         /// <param name="slotAmount"> Amount of slots in save system</param>
         /// <param name="internalSaveSystem">A sub-save-system for saving</param>
         public SaveSlotManager(int slotAmount, SaveSystem<T> internalSaveSystem)
-            : base(internalSaveSystem) =>
+            : base(internalSaveSystem)
+        {
             SlotsAmount = slotAmount;
+            LoadSlots();
+        }
 
         /// <summary>
         /// Deletes a saved slot
@@ -85,7 +93,7 @@ namespace SavesAPI
                 var slot = sorted[i];
                 slots[slot.SlotIndex] = slot;
             }
-            return slots;
+            return LoadedSlots = slots;
         }
         
         /// <summary>
@@ -100,7 +108,7 @@ namespace SavesAPI
         /// </summary>
         /// <param name="slots"></param>
         /// <returns>The first empty slot index, or null if there is not an empty slot</returns>
-        public static int? EmptySlotIndex(T[] slots)
+        public static int? EmptySlotIndex<Type>(Type[] slots) where Type : class
         {
             for (int i = 0; i < slots.Length; i++)
                 if (slots[i] == null)

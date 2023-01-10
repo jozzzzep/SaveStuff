@@ -7,11 +7,11 @@ using UnityEngine;
 namespace Examples.E03
 {
     [Serializable]
-    public class E03SaveFile : SaveSlot
+    public class SaveFile : SaveSlot
     {
         public string textContent;
 
-        public E03SaveFile(int slotNumber, string textContent)
+        public SaveFile(int slotNumber, string textContent)
             : base(slotNumber)
         {
             this.textContent = textContent;
@@ -20,17 +20,26 @@ namespace Examples.E03
 
     public class ClickerGame : MonoBehaviour
     {
-        SaveSlotManager<E03SaveFile> saveSystem;
+        SaveSlotManager<SaveFile> slotSystem;
 
-        // Start is called before the first frame update
         void Start()
         {
-            var internalSaveSystem = new EncryptedSaveSystem<E03SaveFile>()
-            saveSystem = new SlotSaveSystem(3, EncryptedSaveSystem<E03SaveFile>)
+            var directoryPath = PathGenerator.GeneratePathDirectory("saveSlots");
+            var internalSaveSystem = new JsonSaveSystem<SaveFile>(directoryPath, "slot");
+            slotSystem = new SaveSlotManager<SaveFile>(3, internalSaveSystem);
         }
 
-        // Update is called once per frame
         void Update()
+        {
+
+        }
+
+        public void Save()
+        {
+            int emptySlot = SaveSlotManager.EmptySlotIndex(loadedSlots);
+        }
+
+        public void Save(int slot)
         {
 
         }
