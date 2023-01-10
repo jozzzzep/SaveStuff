@@ -29,7 +29,7 @@ namespace SavesAPI
     /// A slot manager and sorter for a save system with fixed amount of slot
     /// </summary>
     /// <typeparam name="T">A <see cref="SaveSlot"/> type class</typeparam>
-    public class SlotSaveSystem<T> : ManagedSaveSystem<T> where T : SaveSlot
+    public class SaveSlotManager<T> : ManagedSaveSystem<T> where T : SaveSlot
     {
         /// <summary>
         /// Amount of slots in save system
@@ -41,7 +41,7 @@ namespace SavesAPI
         /// </summary>
         /// <param name="slotAmount"> Amount of slots in save system</param>
         /// <param name="internalSaveSystem">A sub-save-system for saving</param>
-        public SlotSaveSystem(int slotAmount, SaveSystem<T> internalSaveSystem)
+        public SaveSlotManager(int slotAmount, SaveSystem<T> internalSaveSystem)
             : base(internalSaveSystem) =>
             SlotsAmount = slotAmount;
 
