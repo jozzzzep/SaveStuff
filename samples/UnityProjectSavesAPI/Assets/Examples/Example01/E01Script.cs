@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using SavesAPI;
+using SavesAPI.Advanced;
 
 namespace Examples.E01
 {

@@ -1,39 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SavesAPI.Advanced
 {
     /*/ 
      *
-     *  WARNING: use only to inherit and create custom save system
+     *  WARNING: use only to inherit and create custom save systems
      * 
-     *  - Members --------------
+     *  - Members -------------------------
      *  
-     *      DirectoryPath            - The directory path the save system saves to and loads from
-     *      FilesPrefix              - The prefix of every file created with the save system
-     *      Events                   - Events of the save system
-     *      Save(...)                - Saves an object to a file
-     *      LoadByName(...)          - Loads an object from a file
-     *      LoadByPath(...)          - Loads an object from a file
-     *      LoadDirectory()          - Loads all saved files and returns the objects they store
-     *      Delete(...)              - Deletes a saved file
-     *      LoadIfExists(...)        - Loads a file only if it exits
-     *      FileExists(...)          - Checks if there is an existing saved file with a chosen name
-     *  
-     *  - Abstract members ----- (implement when inheriting) 
-     *  
-     *      FileType                 - The file type of the saveable files
-     *      SaveMethod(...)          - Internal saving method
-     *      LoadByNameMethod(...)    - Internal loading by name method
-     *      LoadByPathMethod(...)    - Internal loading by path method
-     *      LoadDirectoryMethod()    - Internal directory loading method
+     *      DirectoryPath                 - The directory path the save system saves to and loads from
+     *      FilesPrefix                   - The prefix of every file created with the save system
+     *      Events                        - Events of the save system
      *      
-     *  - Protected methods ---- (for child classes when inheriting)
+     *      Save(...)                     - Saves an object to a file
+     *      Load(...)                     - Loads an object from a file
+     *      LoadByPath(...)               - Loads an object from a file
+     *      Delete(...)                   - Deletes a saved file
+     *      DeleteByPath(...)             - Deletes a saved file
+     *      
+     *      LoadIfExists(...)             - Loads a file only if it exits
+     *      LoadIfExistsByPath(...)       - Loads a file only if it exits
+     *      FileExists(...)               - Checks if there is an existing saved file with a chosen name
+     *      
+     *      GetAllFilePaths()             - Returns all file paths of files that have been saved by the save system
+     *      LoadMultiple(...)             - Loads multiple saved files
+     *      LoadAllFiles()                - Loads all files that have been saved by the save system
+     *      
+     *      GeneratePath(...)             - Generates a path for a file based on a given file-name
+     *      ExtractName(...)              - Extracts the file name from a file path
      *  
-     *      GeneratePath(...)        - Generates a path for a file based on a given file-name
-     *
-     *  ------------------------
+     *  - Abstract members ---------------- (implement when inheriting) 
      *  
+     *      FileType                      - The file type of the saveable files
+     *      SaveMethod(...)               - Internal saving method of system
+     *      LoadByPathMethod(...)         - Internal loading by path method of system
+     *      
+     *  - Static Methods ------------------
+     *  
+     *      FileDelete(...)               - Deletes a file from a path only if it exists
+     *      FileExistsByPath(...)         - Checks if there is an existing saved file on a given path
+     *      GetDirectoryFilePaths(...)    - Returns all file paths of files in a directory that contain a given prefix
+     *      MakeSureDirectoryExists(...)  - Creates a directory in a chosen path if it does not exist
+     *      GetLastModificationTime(...)  - Will return the last time a file has been modified or created
+     *      WebGLFileSync()               - Calls the file sync function in WebGL apps
+     *      
+     *  -----------------------------------    
     /*/
 
     /// <summary>
@@ -72,7 +85,7 @@ namespace SavesAPI.Advanced
             Events = new SaveSystemEvents<T>();
             DirectoryPath = directoryPath;
             FilesPrefix = filesPrefix;
-            StaticCommands.MakeSureDirectoryExists(directoryPath);
+            MakeSureDirectoryExists(directoryPath);
         }
 
         /// <summary>
@@ -83,6 +96,7 @@ namespace SavesAPI.Advanced
         {
             SaveMethod(toSave);
             Events.OnSaved(toSave);
+            WebGLFileSync();
         }
 
         /// <summary>
@@ -102,15 +116,9 @@ namespace SavesAPI.Advanced
         {
             var load = LoadByPathMethod(filePath);
             Events.OnLoaded(load);
+            load.LastUsage = GetLastModificationTime(filePath);
             return load;
         }
-
-        /// <summary>
-        /// Returns all file paths of files that have been saved by the save system
-        /// </summary>
-        /// <returns></returns>
-        public List<string> GetAllFilePaths() =>
-            StaticCommands.GetDirectoryFilePaths(DirectoryPath, FilesPrefix);
 
         /// <summary>
         /// Deletes a saved file
@@ -123,7 +131,7 @@ namespace SavesAPI.Advanced
         /// </summary>
         public void DeleteByPath(string filePath)
         {
-            StaticCommands.FileDelete(filePath);
+            FileDelete(filePath);
             Events.OnDeleted(filePath);
         }
 
@@ -156,12 +164,28 @@ namespace SavesAPI.Advanced
             FileExistsByPath(GeneratePath(fileName));
 
         /// <summary>
-        /// Checks if there is an existing saved file on a given path
+        /// Returns all file paths of files that have been saved by the save system
         /// </summary>
-        /// <param name="filePath">The path of the file</param>
         /// <returns></returns>
-        public static bool FileExistsByPath(string filePath) =>
-            StaticCommands.FileExists(filePath);
+        public List<string> GetAllFilePaths() =>
+            GetDirectoryFilePaths(DirectoryPath, FilesPrefix);
+
+        /// <summary>
+        /// Loads multiple saved files
+        /// </summary>
+        /// <param name="filePaths">All paths of files you want to load</param>
+        public T[] LoadMultiple(string[] filePaths)
+        {
+            var files = new T[filePaths.Length];
+            for (int i = 0; i < filePaths.Length; i++)
+                files[i] = LoadByPath(filePaths[i]);
+            return files;
+        }
+
+        /// <summary>
+        /// Loads all files that have been saved by the save system
+        /// </summary>
+        public T[] LoadAllFiles() => LoadMultiple(GetAllFilePaths().ToArray());
 
         /// <summary>
         /// Generates a path for a file based on a given file-name
@@ -171,12 +195,81 @@ namespace SavesAPI.Advanced
         public string GeneratePath(string fileName) =>
             PathGenerator.GeneratePathFile(DirectoryPath, FilesPrefix, fileName, FileType);
 
-        /// <inheritdoc cref="PathGenerator.ExtractNameFromPath(string, string, string, string)" />
+        /// <inheritdoc cref="PathGenerator.ExtractFileNameFromPath(string, string, string, string)" />
         public string ExtractName(string filePath) =>
-            PathGenerator.ExtractNameFromPath(DirectoryPath, FilesPrefix, FileType, filePath);
+            PathGenerator.ExtractFileNameFromPath(DirectoryPath, FilesPrefix, FileType, filePath);
 
         protected abstract void SaveMethod(T toSave);
         protected abstract T LoadByPathMethod(string filePath);
-        protected abstract List<T> LoadAllFilesMethod();
+
+        /// <summary>
+        /// Deletes a file from a path only if it exists
+        /// </summary>
+        /// <param name="filePath">Path of file</param>
+        public static void FileDelete(string filePath)
+        {
+            if (FileExistsByPath(filePath))
+            {
+                File.Delete(filePath);
+                WebGLFileSync();
+            }
+        }
+
+        /// <summary>
+        /// Checks if there is an existing saved file on a given path
+        /// </summary>
+        /// <param name="filePath">Path to check</param>
+        /// <returns></returns>
+        public static bool FileExistsByPath(string filePath) => File.Exists(filePath);
+
+        /// <summary>
+        /// Returns all file paths of files that have been saved by the save system
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="folderPath">Files directory</param>
+        /// <param name="filePrefix">Prefix of saveable files</param>
+        public static List<string> GetDirectoryFilePaths(string folderPath, string filePrefix)
+        {
+            MakeSureDirectoryExists(folderPath);
+
+            var files = new List<string>();
+            var filePaths = Directory.GetFiles(folderPath);
+
+            for (int i = 0; i < filePaths.Length; i++)
+                if (filePaths[i].Contains(filePrefix))
+                    files.Add(filePaths[i]);
+
+            return files;
+        }
+
+        /// <summary>
+        /// Creates a directory in a chosen path if it does not exist
+        /// </summary>
+        /// <param name="dirPath">The path of the directory</param>
+        public static void MakeSureDirectoryExists(string dirPath)
+        {
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+                WebGLFileSync();
+            }
+        }
+
+        /// <summary>
+        /// Will return the last time a file has been modified or created
+        /// </summary>
+        /// <param name="path">Path of file</param>
+        /// <returns></returns>
+        private static DateTime GetLastModificationTime(string path) => File.GetLastWriteTime(path);
+
+        /// <summary>
+        /// Calls the file sync function in WebGL apps
+        /// </summary>
+        private static void WebGLFileSync()
+        {
+#if UNITY_WEBGL
+        Application.ExternalEval("_JS_FileSystem_Sync();");
+#endif
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace SavesAPI
                 (DirectoryPath = PathGenerator.GeneratePathDirectory("general"));
             set
             {
-                StaticCommands.MakeSureDirectoryExists(value);
+                SaveSystem<ISaveable>.MakeSureDirectoryExists(value);
                 directoryPath = value;
             }
         }
@@ -36,8 +36,8 @@ namespace SavesAPI
         {
             Action<string, T> saveAction =
                 s.SavingMethod == SavingMethod.Encrypted ?
-                StaticCommands.EncryptedSave :
-                StaticCommands.JsonSave;
+                EncryptedSaveSystem<T>.StaticSave :
+                JsonSaveSystem<T>.StaticSave;
             saveAction(GeneratePath(s), s);
         }
 
@@ -46,8 +46,8 @@ namespace SavesAPI
         {
             Func<string, T> func =
                 s.SavingMethod == SavingMethod.Encrypted ?
-                StaticCommands.EncryptedLoad<T> :
-                StaticCommands.JsonLoad<T>;
+                EncryptedSaveSystem<T>.StaticLoad :
+                JsonSaveSystem<T>.StaticLoad;
             return func(GeneratePath(s));
         }
 
@@ -55,7 +55,7 @@ namespace SavesAPI
         /// Checks if there is already an existing saved file for a given object
         /// </summary>
         public static bool FileExists<T>(T s) where T : class, ISaveableObject =>
-            StaticCommands.FileExists(GeneratePath(s));
+            SaveSystem<T>.FileExistsByPath(GeneratePath(s));
 
         /// <inheritdoc cref="SaveSystem{T}.LoadIfExists(string)"/>
         public static T LoadIfExist<T>(T s) where T : class, ISaveableObject =>

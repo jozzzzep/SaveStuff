@@ -90,7 +90,7 @@ namespace SavesAPI
         /// <returns></returns>
         public T[] LoadSlots()
         {
-            var filesList = internalSaveSystem.GetAllFilePaths().ToList();
+            var filesList = internalSaveSystem.LoadAllFiles();
             var sorted = filesList.OrderBy(s => s.SlotIndex).ToArray();
             T[] slots = new T[SlotsAmount];
             for (int i = 0; i < sorted.Length; i++)

@@ -43,7 +43,7 @@ namespace SavesAPI
         /// <param name="path">Path of file</param>
         /// <param name="fileType">File type file</param>
         /// <returns></returns>
-        public static string ExtractNameFromPath(string directoryPath, string prefix, string fileType, string path)
+        public static string ExtractFileNameFromPath(string directoryPath, string prefix, string fileType, string path)
         {
             var removeFirst = $"{directoryPath}{prefix}-";
             if (!path.Contains(removeFirst))
