@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using SavesAPI.Advanced;
 
 namespace SavesAPI
@@ -6,7 +7,7 @@ namespace SavesAPI
     /*/
      * 
      *  - Properties ---------------
-     *      SlotsAmount          - Amount of slots in the slot based save system
+     *      SlotsAmount          - Max amount of slots in the slot based save system
      *      FileType             - The file type of the saveable files
      *      DirectoryPath        - The directory path the save system saves to and loads from
      *      FilesPrefix          - The prefix of every file created with the save system
@@ -34,15 +35,18 @@ namespace SavesAPI
         /// <summary>
         /// Recent loaded slots
         /// </summary>
-        public T[] LoadedSlots { get; set; }
+        public T[] LoadedSlots { get; private set; }
 
         /// <summary>
-        /// Amount of slots in save system
+        /// Max amount of slots in save system
         /// </summary>
         public int SlotsAmount { get; private set; }
-        
+
+        public event Action<T[]> SlotsLoaded;
+
         /// <summary>
-        /// A constructor for creating a slot based save system
+        /// A constructor for creating a slot based save system <br></br>
+        /// Loads slots automatically when allocated
         /// </summary>
         /// <param name="slotAmount"> Amount of slots in save system</param>
         /// <param name="internalSaveSystem">A sub-save-system for saving</param>
@@ -63,6 +67,7 @@ namespace SavesAPI
         /// Saves an object to a save slot
         /// </summary>
         /// <param name="toSave">Object to save</param>
+        /// 
         public void Save(T toSave) => internalSaveSystem.Save(toSave);
 
         /// <summary>
@@ -85,7 +90,7 @@ namespace SavesAPI
         /// <returns></returns>
         public T[] LoadSlots()
         {
-            var filesList = internalSaveSystem.LoadDirectory().ToList();
+            var filesList = internalSaveSystem.GetAllFilePaths().ToList();
             var sorted = filesList.OrderBy(s => s.SlotIndex).ToArray();
             T[] slots = new T[SlotsAmount];
             for (int i = 0; i < sorted.Length; i++)
@@ -93,7 +98,8 @@ namespace SavesAPI
                 var slot = sorted[i];
                 slots[slot.SlotIndex] = slot;
             }
-            return LoadedSlots = slots;
+            SlotsLoaded.SafeInvoke(LoadedSlots = slots);
+            return LoadedSlots;
         }
         
         /// <summary>
@@ -102,6 +108,20 @@ namespace SavesAPI
         /// <param name="slot">Slot index</param>
         /// <returns></returns>
         public bool SlotIsEmpty(int slot) => !internalSaveSystem.FileExists(IndexToFileName(slot));
+
+        /// <summary>
+        /// When given array of slots:
+        /// </summary>
+        /// <param name="slots"></param>
+        /// <returns>The first empty slot index, or null if there is not an empty slot</returns>
+        public int? EmptySlotIndex() => EmptySlotIndex(LoadedSlots);
+
+        /// <summary>
+        /// Get value from a chosen loaded slot
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <returns></returns>
+        public T GetSlotValue(int slot) => LoadedSlots[slot];
 
         /// <summary>
         /// When given array of slots:

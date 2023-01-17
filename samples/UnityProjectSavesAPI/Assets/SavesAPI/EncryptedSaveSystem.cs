@@ -9,7 +9,8 @@ namespace SavesAPI
      *      FileType           - The file type of the saveable files
      *      DirectoryPath      - The directory path the save system saves to and loads from
      *      FilesPrefix        - The prefix of every file created with the save system
-     *      
+     *      Events             - Events of the save system
+
      *  - Methods --------------
      *      Save(...)          - Saves an object to a file
      *      Delete(...)        - Deletes a saved file
@@ -39,13 +40,13 @@ namespace SavesAPI
             : base(directoryPath, filesPrefix) => 
             this.fileType = fileType;
 
-        public override void Save(T toSave) =>
+        protected override void SaveMethod(T toSave) =>
             StaticCommands.EncryptedSave(GeneratePath(toSave.Name), toSave);
 
-        public override T Load(string fileName) =>
-            StaticCommands.EncryptedLoad<T>(GeneratePath(fileName));
+        protected override T LoadByPathMethod(string filePath) =>
+            StaticCommands.EncryptedLoad<T>(filePath);
 
-        public override List<T> LoadDirectory() =>
-            StaticCommands.EncryptedLoadDirectory<T>(DirectoryPath, FilesPrefix);
+        protected override List<T> LoadAllFilesMethod() =>
+            StaticCommands.EncryptedLoadDirectoryFiles<T>(DirectoryPath, FilesPrefix);
     }
 }

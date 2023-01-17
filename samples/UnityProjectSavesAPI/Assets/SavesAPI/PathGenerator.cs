@@ -36,6 +36,28 @@ namespace SavesAPI
             => $"{directoryPath}{prefix}-{name}.{fileType}";
 
         /// <summary>
+        /// Extracts the file name from a file path
+        /// </summary>
+        /// <param name="directoryPath">Parent directory path of the saveable file </param>
+        /// <param name="prefix">Prefix of file</param>
+        /// <param name="path">Path of file</param>
+        /// <param name="fileType">File type file</param>
+        /// <returns></returns>
+        public static string ExtractNameFromPath(string directoryPath, string prefix, string fileType, string path)
+        {
+            var removeFirst = $"{directoryPath}{prefix}-";
+            if (!path.Contains(removeFirst))
+                return null;
+            var after = path.Remove(0, removeFirst.Length);
+
+            if (!path.Contains(prefix)) 
+                return null;
+            var prefixCount = fileType.Length + 1;
+            var startIndex = after.Length - prefixCount;
+            return after.Remove(startIndex);
+        }
+
+        /// <summary>
         /// Generates a folder path inside the default main directory - <see cref="MainDirectoryPath"/>
         /// </summary>
         /// <param name="nameSubDir">Name of directory</param>

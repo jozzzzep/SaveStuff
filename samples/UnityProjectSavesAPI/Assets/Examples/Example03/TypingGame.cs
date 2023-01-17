@@ -1,25 +1,44 @@
 using SavesAPI;
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Examples.E03
 {
-    [Serializable]
-    public class SaveFile : SaveSlot
+    public class SaveSlotCard : MonoBehaviour
     {
-        public string textContent;
+        ClickerGame game;
 
-        public SaveFile(int slotNumber, string textContent)
-            : base(slotNumber)
+        [SerializeField] GameObject saveButton, loadButton, deleteButton;
+        [SerializeField] int slotIndex;
+
+        private void Start()
         {
-            this.textContent = textContent;
+            game = FindObjectOfType<ClickerGame>();
+        }
+
+        public void SetState(bool saveInUse)
+        {
+            saveButton.SetActive(!saveInUse);
+            loadButton.SetActive(saveInUse);
+            deleteButton.SetActive(saveInUse);
+        }
+
+        public void Save() => game.Save(slotIndex);
+
+        public void Load() => game.LoadFromSlot(slotIndex);
+
+        public void Delete() 
+        { 
+
         }
     }
 
     public class ClickerGame : MonoBehaviour
     {
+        [SerializeField] TMP_InputField inputField;
+
         SaveSlotManager<SaveFile> slotSystem;
 
         void Start()
@@ -36,12 +55,26 @@ namespace Examples.E03
 
         public void Save()
         {
-            int emptySlot = SaveSlotManager.EmptySlotIndex(loadedSlots);
+            var emptySlot = slotSystem.EmptySlotIndex();
+            if (emptySlot != null)
+                Save(emptySlot.Value);
+            else
+                Error("No empty slots available");
         }
 
         public void Save(int slot)
         {
-
+            var save = new SaveFile(slot, inputField.text);
+            slotSystem.Save(save);
+            slotSystem.LoadSlots();
         }
+
+        public void LoadFromSlot(int slot)
+        {
+            var load = slotSystem.GetSlotValue(slot);
+            inputField.text = load.textContent;
+        }
+
+        public void Error(string message) { Debug.LogError(message); }
     }
 }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System;
+using UnityEditor.PackageManager;
 
 namespace SavesAPI.Advanced
 {
@@ -58,9 +59,51 @@ namespace SavesAPI.Advanced
         /// <typeparam name="T"></typeparam>
         /// <param name="folderPath">Saveable files directory to load from</param>
         /// <param name="filePrefix">Prefix of saveable files</param>
+        /// <returns>A list of all the loaded saveable files</returns>
+        public static List<string> GetDirectoryFilePaths(string folderPath, string filePrefix)
+        {
+            MakeSureDirectoryExists(folderPath);
+
+            var files = new List<string>();
+            var filePaths = Directory.GetFiles(folderPath);
+
+            for (int i = 0; i < filePaths.Length; i++)
+                if (filePaths[i].Contains(filePrefix))
+                    files.Add(filePaths[i]);
+
+            return files;
+        }
+
+        /// <summary>
+        /// Loads all saveable files from a chosen directory, if empty - list count will be 0
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="folderPath">Saveable files directory to load from</param>
+        /// <param name="filePrefix">Prefix of saveable files</param>
         /// <param name="loadFunction">Load fucnction based on the saveable file type</param>
         /// <returns>A list of all the loaded saveable files</returns>
-        public static List<T> LoadDirectory<T>
+        public static List<T> LoadDirectoryFilesData<T>
+            (string[] paths, Func<string, T> loadFunction)
+            where T : class, ISaveable
+        {
+            var objectsLoaded = new List<T>();
+            
+            for (int i = 0; i < paths.Length; i++)
+                objectsLoaded.Add(loadFunction(paths[i]));
+
+            return objectsLoaded;
+        }
+
+
+        /// <summary>
+        /// Loads all saveable files from a chosen directory, if empty - list count will be 0
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="folderPath">Saveable files directory to load from</param>
+        /// <param name="filePrefix">Prefix of saveable files</param>
+        /// <param name="loadFunction">Load fucnction based on the saveable file type</param>
+        /// <returns>A list of all the loaded saveable files</returns>
+        public static List<T> LoadDirectoryFilesData<T>
             (string folderPath, string filePrefix, Func<string, T> loadFunction)
             where T : class, ISaveable
         {
@@ -76,7 +119,6 @@ namespace SavesAPI.Advanced
             return objectsLoaded;
         }
 
-        
         /// <summary>
         /// Will save a saveable object to a file and encrypt it, can be loaded only with <see cref="EncryptedLoad{T}(string)"/>
         /// </summary>
@@ -121,9 +163,9 @@ namespace SavesAPI.Advanced
         /// <param name="folderPath">Path of diectory to load from</param>
         /// <param name="filePrefix">Prefix of saveable files</param>
         /// <returns></returns>
-        public static List<T> EncryptedLoadDirectory<T>(string folderPath, string filePrefix)
+        public static List<T> EncryptedLoadDirectoryFiles<T>(string folderPath, string filePrefix)
             where T : class, ISaveable =>
-            LoadDirectory(folderPath, filePrefix, EncryptedLoad<T>);
+            LoadDirectoryFilesData(folderPath, filePrefix, EncryptedLoad<T>);
 
         /// <summary>
         /// Will save a saveable object and serialize it to json format
@@ -161,9 +203,9 @@ namespace SavesAPI.Advanced
         /// <param name="directoryPath">Directory path to load from</param>
         /// <param name="filePrefix">Saveable files prefix</param>
         /// <returns></returns>
-        public static List<T> JsonLoadDirectory<T>(string directoryPath, string filePrefix)
+        public static List<T> JsonLoadDirectoryFiles<T>(string directoryPath, string filePrefix)
             where T : class, ISaveable =>
-            LoadDirectory(directoryPath, filePrefix, JsonLoad<T>);
+            LoadDirectoryFilesData(directoryPath, filePrefix, JsonLoad<T>);
 
         /// <summary>
         /// Creates a directory in a chosen path if it does not exist

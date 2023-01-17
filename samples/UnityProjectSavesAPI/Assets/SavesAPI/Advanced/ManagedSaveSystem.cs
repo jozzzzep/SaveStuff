@@ -7,6 +7,7 @@
      *      FileType           - The file type of the saveable files
      *      DirectoryPath      - The directory path the save system saves to and loads from
      *      FilesPrefix        - The prefix of every file created with the save system <summary>
+     *      Events             - Events of the managed save system
      *      
      *  - Protected members ------ (for child classes when inheriting)
      *  
@@ -26,6 +27,10 @@
         protected SaveSystem<T> internalSaveSystem;
 
 
+        /// <inheritdoc cref="SaveSystem{T}.Events" />
+        public SaveSystemEvents<T> Events  => internalSaveSystem.Events;
+
+
         /// <inheritdoc cref="SaveSystem{T}.FileType" />
         public string FileType => internalSaveSystem.FileType;
 
@@ -42,7 +47,9 @@
         /// The base constructor of a managed save system
         /// </summary>
         /// <param name="internalSaveSystem"></param>
-        public ManagedSaveSystem(SaveSystem<T> internalSaveSystem) =>
+        public ManagedSaveSystem(SaveSystem<T> internalSaveSystem)
+        {
             this.internalSaveSystem = internalSaveSystem;
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace SavesAPI
      *      FileType           - The file type of the saveable files - Always "json"
      *      DirectoryPath      - The directory path the save system saves to and loads from
      *      FilesPrefix        - The prefix of every file created with the save system
+     *      Events             - Events of the save system
      *      
      *  - Methods --------------
      *      Save(...)          - Saves an object to a file
@@ -40,13 +41,13 @@ namespace SavesAPI
             : base(directoryPath, filesPrefix)
         { }
         
-        public override void Save(T toSave) =>
+        protected override void SaveMethod(T toSave) =>
             StaticCommands.JsonSave(GeneratePath(toSave.Name), toSave);
 
-        public override T Load(string fileName) =>
-            StaticCommands.JsonLoad<T>(GeneratePath(fileName));
+        protected override T LoadByPathMethod(string filePath) =>
+            StaticCommands.JsonLoad<T>(filePath);
 
-        public override List<T> LoadDirectory() =>
-            StaticCommands.JsonLoadDirectory<T>(DirectoryPath, FilesPrefix);
+        protected override List<T> LoadAllFilesMethod() =>
+            StaticCommands.JsonLoadDirectoryFiles<T>(DirectoryPath, FilesPrefix);
     }
 }

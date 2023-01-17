@@ -3,8 +3,6 @@ using System;
 
 namespace SavesAPI
 {
-    
-
     /// <summary>
     /// An easy-to-use static save system, for saving and loading without a save system instance <br></br>
     /// The system takes objects that implement the <see cref="ISaveableObject"/> interface
