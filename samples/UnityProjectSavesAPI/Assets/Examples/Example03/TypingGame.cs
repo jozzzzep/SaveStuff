@@ -39,13 +39,13 @@ namespace Examples.E03
     {
         [SerializeField] TMP_InputField inputField;
 
-        SaveSlotManager<SaveFile> slotSystem;
+        SlotSaveSystem<SaveFile> slotSystem;
 
         void Start()
         {
             var directoryPath = PathGenerator.GeneratePathDirectory("saveSlots");
             var internalSaveSystem = new JsonSaveSystem<SaveFile>(directoryPath, "slot");
-            slotSystem = new SaveSlotManager<SaveFile>(3, internalSaveSystem);
+            slotSystem = new SlotSaveSystem<SaveFile>(3, internalSaveSystem);
         }
 
         void Update()

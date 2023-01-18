@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SavesAPI
+namespace SavesAPI.Slots
 {
     /*/
      * 
@@ -20,14 +20,14 @@ namespace SavesAPI
     public class SaveSlot : ISaveable
     {
         /// <summary>
-        /// Index of the save slot inside a <see cref="SaveSlotManager{T}"/>
+        /// Index of the save slot inside a <see cref="SlotSaveSystem{T}"/>
         /// </summary>
         public int SlotIndex { get; private set; }
 
         /// <summary>
         /// The name of the file based on the slot index
         /// </summary>
-        public string Name => SaveSlotManager<SaveSlot>.IndexToFileName(SlotIndex);
+        public string Name => SlotSaveSystem<SaveSlot>.IndexToFileName(SlotIndex);
 
         public DateTime LastUsage { get; set; }
 

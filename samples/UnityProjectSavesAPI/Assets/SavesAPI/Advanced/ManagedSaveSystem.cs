@@ -4,14 +4,15 @@
      * 
      *  - Members ----------------
      *  
-     *      FileType           - The file type of the saveable files
-     *      DirectoryPath      - The directory path the save system saves to and loads from
-     *      FilesPrefix        - The prefix of every file created with the save system <summary>
-     *      Events             - Events of the managed save system
+     *      InternalSaveSystem  - The internal save system
+     *      FileType            - The file type of the saveable files
+     *      DirectoryPath       - The directory path the save system saves to and loads from
+     *      FilesPrefix         - The prefix of every file created with the save system
+     *      Events              - Events of the managed save system
      *      
      *  - Protected members ------ (for child classes when inheriting)
      *  
-     *      internalSaveSystem - The internal save system
+     *      internalSaveSystem  - The internal save system
      *      
     /*/
 
@@ -24,23 +25,23 @@
         /// <summary>
         /// The internal save system, you can choose which save system you want to use
         /// </summary>
-        protected SaveSystem<T> internalSaveSystem;
+        public SaveSystem<T> InternalSaveSystem { get; private set; }
 
 
         /// <inheritdoc cref="SaveSystem{T}.Events" />
-        public SaveSystemEvents<T> Events  => internalSaveSystem.Events;
+        public SaveSystemEvents<T> Events  => InternalSaveSystem.Events;
 
 
         /// <inheritdoc cref="SaveSystem{T}.FileType" />
-        public string FileType => internalSaveSystem.FileType;
+        public string FileType => InternalSaveSystem.FileType;
 
 
         /// <inheritdoc cref="SaveSystem{T}.DirectoryPath" />
-        public string DirectoryPath => internalSaveSystem.DirectoryPath;
+        public string DirectoryPath => InternalSaveSystem.DirectoryPath;
 
 
         /// <inheritdoc cref="SaveSystem{T}.FilesPrefix" />
-        public string FilesPrefix => internalSaveSystem.FilesPrefix;
+        public string FilesPrefix => InternalSaveSystem.FilesPrefix;
 
 
         /// <summary>
@@ -49,7 +50,7 @@
         /// <param name="internalSaveSystem"></param>
         public ManagedSaveSystem(SaveSystem<T> internalSaveSystem)
         {
-            this.internalSaveSystem = internalSaveSystem;
+            InternalSaveSystem = internalSaveSystem;
         }
     }
 }

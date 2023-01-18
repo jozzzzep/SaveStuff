@@ -31,6 +31,19 @@ namespace SavesAPI.Advanced
                 action(args);
         }
 
+        internal static void SafeInvoke(this Action<SaveSlot> action, SaveSlot args)
+        {
+            if (action != null)
+                action(args);
+        }
+
+        internal static void SafeInvoke(this Action<int> action, int args)
+        {
+            if (action != null)
+                action(args);
+        }
+
+
         internal static void SafeInvoke<T>(this Action<T[]> action, T[] args)
             where T : class, ISaveable
         {
