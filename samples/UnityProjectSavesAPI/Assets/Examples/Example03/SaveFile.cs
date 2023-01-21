@@ -1,4 +1,4 @@
-﻿using SavesAPI.Slots;
+﻿using SavesAPI
 using System;
 
 namespace Examples.E03
