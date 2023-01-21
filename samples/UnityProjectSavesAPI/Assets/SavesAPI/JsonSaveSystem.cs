@@ -58,6 +58,14 @@ namespace SavesAPI
         public JsonSaveSystem(string directoryPath, string filesPrefix)
             : base(directoryPath, filesPrefix)
         { }
+
+        /// <summary>
+        /// Save system constructor for basic usage
+        /// </summary>
+        /// <param name="directoryName">The name of the saves directory</param>
+        public JsonSaveSystem(string directoryName) 
+            : base(directoryName)
+        { }
        
         protected override void SaveMethod(T toSave) =>
             StaticSave(GeneratePath(toSave.Name), toSave);
@@ -76,7 +84,6 @@ namespace SavesAPI
             var toJson = JsonUtility.ToJson(obj, true);
             File.WriteAllText(path, toJson);
         }
-
 
         /// <summary>
         /// Will load a file and deserialize it from json to saveable type

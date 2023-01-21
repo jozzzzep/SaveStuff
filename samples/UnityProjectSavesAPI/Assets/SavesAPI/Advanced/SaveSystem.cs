@@ -89,6 +89,14 @@ namespace SavesAPI.Advanced
         }
 
         /// <summary>
+        /// Save system constructor for basic usage
+        /// </summary>
+        /// <param name="directoryName">The name of the saves directory</param>
+        public SaveSystem(string directoryName)
+            : this(PathGenerator.GeneratePathDirectory(directoryName), "data")
+        { }
+
+        /// <summary>
         /// Saves an object to a file
         /// </summary>
         /// <param name="toSave">Object to save</param>

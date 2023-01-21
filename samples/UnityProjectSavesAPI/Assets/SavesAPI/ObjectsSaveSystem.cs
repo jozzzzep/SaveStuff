@@ -3,6 +3,40 @@ using System;
 
 namespace SavesAPI
 {
+    /*/
+     * 
+     *  - Properties ----------------
+     *  
+     *      DirectoryPath           - The directory path the save system saves to and loads from
+     *      FilesPrefix             - The prefix of every file created with the save system
+     *      
+     *  - Methods -------------------
+     *  
+     *      Save(...)               - Saves an object to a file
+     *      Load(...)               - Loads an object from a file
+     *      
+     *      LoadByPath(...)         - Loads an object from a file
+     *      Delete(...)             - Deletes a saved file
+     *      DeleteByPath(...)       - Deletes a saved file
+     *                             
+     *      LoadIfExists(...)       - Loads a file only if it exits
+     *      LoadIfExistsByPath(...) - Loads a file only if it exits
+     *      FileExists(...)         - Checks if there is an existing saved file with a chosen name
+     *      
+     *      GetAllFilePaths()       - Returns all file paths of files that have been saved by the save system
+     *      LoadMultiple(...)       - Loads multiple saved files
+     *      LoadAllFiles()          - Loads all files that have been saved by the save system
+     *      
+     *      GeneratePath(...)       - Generates a path for a file based on a given file-name
+     *      ExtractName(...)        - Extracts the file name from a file path
+     *      
+     *  - Static Methods ------------
+     *  
+     *      StaticSave(...)         - Will save a saveable object and serialize it to json format
+     *      StaticLoad(...)         - Will load a file and deserialize it from json to a saveable type
+     *      
+    /*/
+
     /// <summary>
     /// An easy-to-use static save system, for saving and loading without a save system instance <br></br>
     /// The system takes objects that implement the <see cref="ISaveableObject"/> interface

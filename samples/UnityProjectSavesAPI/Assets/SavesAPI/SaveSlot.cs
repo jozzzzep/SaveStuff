@@ -5,10 +5,10 @@ namespace SavesAPI
     /*/
      * 
      *  - Properties ---
+     *  
      *      SlotIndex  - Index of the save slot inside a SlotSaveSystem
      *      Name       - The name of the file based on the slot index
      *      LastUsage  - The last time the save has been created or modified
-     *  ----------------
      *  
     /*/
 

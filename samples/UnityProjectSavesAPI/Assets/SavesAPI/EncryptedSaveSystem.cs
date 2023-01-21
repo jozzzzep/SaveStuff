@@ -59,6 +59,14 @@ namespace SavesAPI
             : base(directoryPath, filesPrefix) => 
             this.fileType = fileType;
 
+        /// <summary>
+        /// Save system constructor for basic usage
+        /// </summary>
+        /// <param name="directoryName">The name of the saves directory</param>
+        public EncryptedSaveSystem(string directoryName)
+            : base(directoryName)
+        { }
+
         protected override void SaveMethod(T toSave) =>
             StaticSave(GeneratePath(toSave.Name), toSave);
 

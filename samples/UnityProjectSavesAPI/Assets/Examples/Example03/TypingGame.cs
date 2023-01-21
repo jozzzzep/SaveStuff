@@ -1,4 +1,4 @@
-using SavesAPI.Slots;
+using SavesAPI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -71,7 +71,7 @@ namespace Examples.E03
 
         public void LoadFromSlot(int slot)
         {
-            var load = slotSystem.GetSlotValue(slot);
+            var load = slotSystem.Load(slot);
             inputField.text = load.textContent;
         }
 
