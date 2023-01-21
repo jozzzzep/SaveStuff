@@ -1,4 +1,4 @@
-using SavesAPI;
+using SavesAPI.Slots;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;

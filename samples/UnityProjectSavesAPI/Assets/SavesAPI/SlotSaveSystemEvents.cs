@@ -1,7 +1,7 @@
 ﻿using System;
 using SavesAPI.Advanced;
 
-namespace SavesAPI.Slots
+namespace SavesAPI
 {
     public class SlotSaveSystemEvents<T> where T : SaveSlot
     {

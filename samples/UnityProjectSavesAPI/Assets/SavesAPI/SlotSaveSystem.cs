@@ -2,7 +2,7 @@
 using Mono.Cecil;
 using SavesAPI.Advanced;
 
-namespace SavesAPI.Slots
+namespace SavesAPI
 {
     /*/
      * 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SavesAPI.Slots
+namespace SavesAPI
 {
     /*/
      * 
