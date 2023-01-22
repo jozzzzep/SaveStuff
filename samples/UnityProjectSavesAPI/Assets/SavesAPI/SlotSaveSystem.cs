@@ -31,8 +31,8 @@ namespace SavesAPI
      *      
      *  - Static methods --------------
      *  
-     *      EmptySlotIndex            - Returns the first empty slot index by analyzing a given slot states array
-     *      IndexToFileName           - Takes a slot index and returns a file-name
+     *      EmptySlotIndex(...)       - Returns the first empty slot index by analyzing a given slot states array
+     *      IndexToFileName(...)      - Takes a slot index and returns a file-name
      *      
     /*/
 
@@ -46,6 +46,8 @@ namespace SavesAPI
         /// Max amount of slots in save system
         /// </summary>
         public int SlotsAmount { get; private set; }
+
+         
 
         /// <summary>
         /// A constructor for creating a slot based save system <br></br>
