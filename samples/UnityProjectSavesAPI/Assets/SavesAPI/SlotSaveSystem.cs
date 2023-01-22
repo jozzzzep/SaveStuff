@@ -12,6 +12,7 @@ namespace SavesAPI
      *      DirectoryPath             - The directory path the save system saves to and loads from
      *      FilesPrefix               - The prefix of every file created with the save system
      *      Events                    - Events of the save system
+     *      SlotEvents                - Slot events of the save system
      *      
      *  - Methods ---------------------
      *  
@@ -47,7 +48,7 @@ namespace SavesAPI
         /// </summary>
         public int SlotsAmount { get; private set; }
 
-         
+        public SlotSaveSystemEvents<T> SlotEvents { get; private set; }
 
         /// <summary>
         /// A constructor for creating a slot based save system <br></br>
@@ -59,6 +60,7 @@ namespace SavesAPI
             : base(internalSaveSystem)
         {
             SlotsAmount = slotsAmount;
+            SlotEvents = new SlotSaveSystemEvents<T>();
         }
 
         /// <summary>
@@ -66,20 +68,33 @@ namespace SavesAPI
         /// </summary>
         /// <param name="toSave">Object to save</param>
         /// 
-        public void Save(T toSave) => InternalSaveSystem.Save(toSave);
+        public void Save(T toSave)
+        {
+            InternalSaveSystem.Save(toSave);
+            SlotEvents.OnSaved(toSave);
+        }
 
         /// <summary>
         /// Loads a saveable object from a save slot
         /// </summary>
         /// <param name="slot">Slot index</param>
         /// <returns></returns>
-        public T Load(int slot) => InternalSaveSystem.Load(IndexToFileName(slot));
+        public T Load(int slot)
+        {
+            var loaded = InternalSaveSystem.Load(IndexToFileName(slot));
+            SlotEvents.OnLoaded(loaded);
+            return loaded;
+        }
 
         /// <summary>
         /// Deletes a saved slot
         /// </summary>
         /// <param name="slot">Slot index</param>
-        public void Delete(int slot) => InternalSaveSystem.Delete(IndexToFileName(slot));
+        public void Delete(int slot)
+        {
+            InternalSaveSystem.Delete(IndexToFileName(slot));
+            SlotEvents.OnDeleted(slot);
+        }
 
         /// <summary>
         /// Checks if a slot is currently not storing data

@@ -1,43 +1,13 @@
 using SavesAPI;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 namespace Examples.E03
 {
-    public class SaveSlotCard : MonoBehaviour
-    {
-        ClickerGame game;
-
-        [SerializeField] GameObject saveButton, loadButton, deleteButton;
-        [SerializeField] int slotIndex;
-
-        private void Start()
-        {
-            game = FindObjectOfType<ClickerGame>();
-        }
-
-        public void SetState(bool saveInUse)
-        {
-            saveButton.SetActive(!saveInUse);
-            loadButton.SetActive(saveInUse);
-            deleteButton.SetActive(saveInUse);
-        }
-
-        public void Save() => game.Save(slotIndex);
-
-        public void Load() => game.LoadFromSlot(slotIndex);
-
-        public void Delete() 
-        { 
-
-        }
-    }
-
-    public class ClickerGame : MonoBehaviour
+    public class TypingGame : MonoBehaviour
     {
         [SerializeField] TMP_InputField inputField;
+        [SerializeField] SaveSlotCard[] saveSlotCards;
 
         SlotSaveSystem<SaveFile> slotSystem;
 
@@ -46,11 +16,21 @@ namespace Examples.E03
             var directoryPath = PathGenerator.GeneratePathDirectory("saveSlots");
             var internalSaveSystem = new JsonSaveSystem<SaveFile>(directoryPath, "slot");
             slotSystem = new SlotSaveSystem<SaveFile>(3, internalSaveSystem);
+
+            slotSystem.Events.FilesUpdated += UpdateSlots;
+            UpdateSlots();
         }
 
         void Update()
         {
 
+        }
+
+        public void UpdateSlots()
+        {
+            var slotsState = slotSystem.GetSlotsState();
+            for (int i = 0; i < saveSlotCards.Length; i++)
+                saveSlotCards[i].SetState(slotsState[i]);
         }
 
         public void Save()
@@ -66,8 +46,10 @@ namespace Examples.E03
         {
             var save = new SaveFile(slot, inputField.text);
             slotSystem.Save(save);
-            slotSystem.LoadSlots();
         }
+
+        public void Delete(int slot) =>
+            slotSystem.Delete(slot);
 
         public void LoadFromSlot(int slot)
         {
@@ -75,6 +57,7 @@ namespace Examples.E03
             inputField.text = load.textContent;
         }
 
-        public void Error(string message) { Debug.LogError(message); }
+        public void Error(string message) =>
+            Debug.LogError(message);
     }
 }

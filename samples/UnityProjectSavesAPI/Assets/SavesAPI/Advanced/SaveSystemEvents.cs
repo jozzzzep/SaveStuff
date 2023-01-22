@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
 
 namespace SavesAPI.Advanced
 {
@@ -10,28 +9,41 @@ namespace SavesAPI.Advanced
     public class SaveSystemEvents<T> where T : class, ISaveable
     {
         /// <summary>
-        /// Called when an object is saved 
+        /// Raised when saving or deleting
+        /// </summary>
+        public event Action FilesUpdated;
+
+        /// <summary>
+        /// Raised when an object is saved 
         /// </summary>
         public event Action<T> Saved;
 
         /// <summary>
-        /// Called after loading an object
+        /// Raised after loading an object
         /// </summary>
         public event Action<T> Loaded;
 
         /// <summary>
-        /// Called after deletion of a saved file, returns the path
+        /// Raised after deletion of a saved file, returns the path
         /// </summary>
         public event Action<string> Deleted;
 
-        /// <summary>
-        /// Called after directory loading
-        /// </summary>
-        public event Action<List<T>> DirectoryLoaded;
 
-        public void OnSaved(T savedObj) => Saved.SafeInvoke(savedObj);
-        public void OnLoaded(T loadedObj) => Loaded.SafeInvoke(loadedObj);
-        public void OnDeleted(string deletedFileName) => Deleted.SafeInvoke(deletedFileName);
-        public void OnDirectoryLoaded(List<T> loadedObjects) => DirectoryLoaded.SafeInvoke(loadedObjects);
+        internal void OnUpdated() => FilesUpdated.SafeInvoke();
+
+        internal void OnLoaded(T loadedObj) => Loaded.SafeInvoke(loadedObj);
+
+        internal void OnSaved(T savedObj)
+        {
+            Saved.SafeInvoke(savedObj);
+            OnUpdated();
+        }
+
+        internal void OnDeleted(string deletedFileName)
+        {
+            Deleted.SafeInvoke(deletedFileName);
+            OnUpdated();
+        }
+
     }
 }
