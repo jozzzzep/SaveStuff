@@ -14,26 +14,17 @@ namespace SavesAPI
      *  
      *      Save(...)               - Saves an object to a file
      *      Load(...)               - Loads an object from a file
-     *      
-     *      LoadByPath(...)         - Loads an object from a file
      *      Delete(...)             - Deletes a saved file
-     *      DeleteByPath(...)       - Deletes a saved file
-     *                             
-     *      LoadIfExists(...)       - Loads a file only if it exits
-     *      LoadIfExistsByPath(...) - Loads a file only if it exits
-     *      FileExists(...)         - Checks if there is an existing saved file with a chosen name
      *      
-     *      GetAllFilePaths()       - Returns all file paths of files that have been saved by the save system
-     *      LoadMultiple(...)       - Loads multiple saved files
-     *      LoadAllFiles()          - Loads all files that have been saved by the save system
+     *      LoadIfExists(...)       - Loads a file only if it exits
+     *      FileExists(...)         - Checks if there is an existing saved file with a chosen name
      *      
      *      GeneratePath(...)       - Generates a path for a file based on a given file-name
      *      ExtractName(...)        - Extracts the file name from a file path
+     *      GetFileType(...)        - Returns the file tyoe of a given saveable object
      *      
-     *  - Static Methods ------------
-     *  
-     *      StaticSave(...)         - Will save a saveable object and serialize it to json format
-     *      StaticLoad(...)         - Will load a file and deserialize it from json to a saveable type
+     *      InitializeObject(...)   - If there is an existing save for the object - returns the loaded object data from the file
+     *                                If there is not an existing file - returns the given default value
      *      
     /*/
 
@@ -85,15 +76,20 @@ namespace SavesAPI
             return func(GeneratePath(s));
         }
 
+        /// <inheritdoc cref="SaveSystem{T}.Delete(string)"/>
+        public static void Delete<T>(T obj) where T : class, ISaveableObject 
+            => SaveSystem<ISaveable>.FileDelete(GeneratePath(obj));
+
+
+        /// <inheritdoc cref="SaveSystem{T}.LoadIfExists(string)"/>
+        public static T LoadIfExist<T>(T s) where T : class, ISaveableObject =>
+            FileExists(s) ? Load(s) : null;
+
         /// <summary>
         /// Checks if there is already an existing saved file for a given object
         /// </summary>
         public static bool FileExists<T>(T s) where T : class, ISaveableObject =>
             SaveSystem<T>.FileExistsByPath(GeneratePath(s));
-
-        /// <inheritdoc cref="SaveSystem{T}.LoadIfExists(string)"/>
-        public static T LoadIfExist<T>(T s) where T : class, ISaveableObject =>
-            FileExists(s) ? Load(s) : null;
 
         /// <inheritdoc cref="PathGenerator.GeneratePathFile(string, string, string, string)"/>
         public static string GeneratePath(string fileName, string fileType)=>
@@ -110,7 +106,7 @@ namespace SavesAPI
             obj.SavingMethod == SavingMethod.Encrypted ? "savedata" : "json";
 
         /// <summary>
-        /// If there is an existing save for the object - returns the loaded object from the file <br></br>
+        /// If there is an existing save for the object - returns the loaded object data from the file <br></br>
         /// If there is not an existing file - returns the given default value
         /// </summary>
         /// <param name="defaultData">The default value of the save file</param>
