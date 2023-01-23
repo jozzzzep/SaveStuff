@@ -4,7 +4,7 @@ using System;
 namespace Examples.E02
 {
     [Serializable]
-    public class E02SaveFile : ISaveableObject
+    public class E02SaveFile : IQuickSaveable
     {
         public string textContent;
 

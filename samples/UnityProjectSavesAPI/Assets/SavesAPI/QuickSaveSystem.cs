@@ -30,9 +30,9 @@ namespace SavesAPI
 
     /// <summary>
     /// An easy-to-use static save system, for saving and loading without a save system instance <br></br>
-    /// The system takes objects that implement the <see cref="ISaveableObject"/> interface
+    /// The system takes objects that implement the <see cref="IQuickSaveable"/> interface
     /// </summary>
-    public static class ObjectsSaveSystem
+    public static class QuickSaveSystem
     {
         private static string directoryPath;
 
@@ -57,7 +57,7 @@ namespace SavesAPI
         }
 
         /// <inheritdoc cref="SaveSystem{T}.Save(T)"/>
-        public static void Save<T>(T s) where T : class, ISaveableObject
+        public static void Save<T>(T s) where T : class, IQuickSaveable
         {
             Action<string, T> saveAction =
                 s.SavingMethod == SavingMethod.Encrypted ?
@@ -67,7 +67,7 @@ namespace SavesAPI
         }
 
         /// <inheritdoc cref="SaveSystem{T}.Load(string)"/>
-        public static T Load<T>(T s) where T : class, ISaveableObject
+        public static T Load<T>(T s) where T : class, IQuickSaveable
         {
             Func<string, T> func =
                 s.SavingMethod == SavingMethod.Encrypted ?
@@ -77,18 +77,18 @@ namespace SavesAPI
         }
 
         /// <inheritdoc cref="SaveSystem{T}.Delete(string)"/>
-        public static void Delete<T>(T obj) where T : class, ISaveableObject 
+        public static void Delete<T>(T obj) where T : class, IQuickSaveable 
             => SaveSystem<ISaveable>.FileDelete(GeneratePath(obj));
 
 
         /// <inheritdoc cref="SaveSystem{T}.LoadIfExists(string)"/>
-        public static T LoadIfExist<T>(T s) where T : class, ISaveableObject =>
+        public static T LoadIfExist<T>(T s) where T : class, IQuickSaveable =>
             FileExists(s) ? Load(s) : null;
 
         /// <summary>
         /// Checks if there is already an existing saved file for a given object
         /// </summary>
-        public static bool FileExists<T>(T s) where T : class, ISaveableObject =>
+        public static bool FileExists<T>(T s) where T : class, IQuickSaveable =>
             SaveSystem<T>.FileExistsByPath(GeneratePath(s));
 
         /// <inheritdoc cref="PathGenerator.GeneratePathFile(string, string, string, string)"/>
@@ -96,13 +96,13 @@ namespace SavesAPI
             PathGenerator.GeneratePathFile(DirectoryPath, FilesPrefix, fileName, fileType);
 
         /// <inheritdoc cref="PathGenerator.GeneratePathFile(string, string, string, string)"/>
-        public static string GeneratePath<T>(T savableObj) where T : class, ISaveableObject =>
+        public static string GeneratePath<T>(T savableObj) where T : class, IQuickSaveable =>
             GeneratePath(savableObj.Name, GetFileType(savableObj));
 
         /// <summary>
         /// Returns the file type of a given saveable object
         /// </summary>
-        public static string GetFileType<T>(T obj) where T : class, ISaveableObject =>
+        public static string GetFileType<T>(T obj) where T : class, IQuickSaveable =>
             obj.SavingMethod == SavingMethod.Encrypted ? "savedata" : "json";
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace SavesAPI
         /// </summary>
         /// <param name="defaultData">The default value of the save file</param>
         /// <returns></returns>
-        public static T InitializeObject<T>(T defaultData) where T : class, ISaveableObject =>
+        public static T InitializeObject<T>(T defaultData) where T : class, IQuickSaveable =>
             LoadIfExist(defaultData) ?? defaultData;
     }
 }

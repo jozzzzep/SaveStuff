@@ -12,7 +12,7 @@ namespace Examples.E02
 
         private void Awake()
         {
-            saveFile = ObjectsSaveSystem.InitializeObject(saveFile);
+            saveFile = QuickSaveSystem.InitializeObject(saveFile);
         }
 
         void Start()
@@ -27,14 +27,14 @@ namespace Examples.E02
 
         public void LoadData()
         {
-            saveFile = ObjectsSaveSystem.Load(saveFile);
+            saveFile = QuickSaveSystem.Load(saveFile);
             textField.text = saveFile.textContent;
         }
 
         public void SaveData()
         {
             saveFile = new E02SaveFile(textField.text);
-            ObjectsSaveSystem.Save(saveFile);
+            QuickSaveSystem.Save(saveFile);
         }
     }
 }
