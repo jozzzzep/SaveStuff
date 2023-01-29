@@ -1,15 +1,23 @@
-### ;
-![img](https://i.imgur.com/swFyjTR.png)
+# Documentations
 
-# Save Systems
+# Advanced Classes
+
+
+## Save Systems
 
 - **JsonSaveSystem**
 
+
 - **EncryptedSaveSystem**
 
-- **QuickSaveSystem**
+- **QuickSaveSystem**  
+  Static save system class for quick basic usage.  
+  Allows saving and loading objects without the need for a save system instance.  
+  This class takes the objects taht implemet the interface IQuickSaveable
 
-- **SlotSaveSystem**
+- **SlotSaveSystem**  
+Save system that manages your saves in slots.  
+If you want to implement a save sysytem with constant amount of slots.
 
 - [**SaveSystem**](#savesystem-class)  
     The base class of all save systems.  
