@@ -25,7 +25,7 @@ If you want to implement a save sysytem with constant amount of slots.
     Use this class only with inherience for creating other save systems
 
 # SaveSystem class
-[BACK TO MENU](#)  
+[BACK TO MENU](#documentations)  
 The base class of all save systems.  
 Don't use this class directly, use one of [these](#save-systems) save system classes instead.
 
