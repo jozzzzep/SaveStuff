@@ -1,6 +1,6 @@
-﻿using SavesAPI.Advanced;
+﻿using SavesStuff.Advanced;
 
-namespace SavesAPI
+namespace SavesStuff
 {
     /*/
      * 

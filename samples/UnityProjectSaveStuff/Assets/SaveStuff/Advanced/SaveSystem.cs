@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace SavesAPI.Advanced
+namespace SavesStuff.Advanced
 {
     /*/ 
      *
@@ -276,7 +276,7 @@ namespace SavesAPI.Advanced
         private static void WebGLFileSync()
         {
 #if UNITY_WEBGL
-        Application.ExternalEval("_JS_FileSystem_Sync();");
+        UnityEngine.Application.ExternalEval("_JS_FileSystem_Sync();");
 #endif
         }
     }

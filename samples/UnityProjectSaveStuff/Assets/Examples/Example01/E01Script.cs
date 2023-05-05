@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using SavesAPI;
-using SavesAPI.Advanced;
+using SavesStuff;
+using SavesStuff.Advanced;
 
 namespace Examples.E01
 {

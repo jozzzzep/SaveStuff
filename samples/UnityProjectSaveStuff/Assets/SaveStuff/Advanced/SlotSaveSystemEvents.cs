@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SavesAPI.Advanced
+namespace SavesStuff.Advanced
 {
     /// <summary>
     /// Events class for slot save system

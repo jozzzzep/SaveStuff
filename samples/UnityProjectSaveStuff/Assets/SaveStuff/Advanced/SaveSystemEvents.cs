@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SavesAPI.Advanced
+namespace SavesStuff.Advanced
 {
     /// <summary>
     /// Events for save systems

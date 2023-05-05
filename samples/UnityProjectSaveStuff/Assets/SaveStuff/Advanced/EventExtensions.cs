@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 
-namespace SavesAPI.Advanced
+namespace SavesStuff.Advanced
 {
     internal static class EventExtensions
     {

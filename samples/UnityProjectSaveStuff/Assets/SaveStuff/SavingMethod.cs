@@ -1,4 +1,4 @@
-﻿namespace SavesAPI
+﻿namespace SavesStuff
 {
     /// <summary>
     /// An enum for representing saving methods of the SavesAPI
