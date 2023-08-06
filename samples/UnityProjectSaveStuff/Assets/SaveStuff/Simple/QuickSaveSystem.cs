@@ -80,7 +80,6 @@ namespace SavesStuff
         public static void Delete<T>(T obj) where T : class, IQuickSaveable 
             => SaveSystem<ISaveable>.FileDelete(GeneratePath(obj));
 
-
         /// <inheritdoc cref="SaveSystem{T}.LoadIfExists(string)"/>
         public static T LoadIfExist<T>(T s) where T : class, IQuickSaveable =>
             FileExists(s) ? Load(s) : null;

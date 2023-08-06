@@ -11,7 +11,6 @@ namespace SavesStuff.Advanced
         public TType DeafultValue { get; private set; }
         public TypeCode TypeCode { get; private set; }
 
-
         TType cashedValue;
         Action<string, TType> setValueFunction;
         Func<string, TType> getValueFunction;
@@ -48,5 +47,4 @@ namespace SavesStuff.Advanced
             cashedValue = GetValue();
         }
     }
-
 }
