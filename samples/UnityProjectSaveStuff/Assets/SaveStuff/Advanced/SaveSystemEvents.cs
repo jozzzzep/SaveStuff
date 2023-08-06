@@ -28,7 +28,6 @@ namespace SavesStuff.Advanced
         /// </summary>
         public event Action<string> Deleted;
 
-
         internal void OnUpdated() => FilesUpdated.SafeInvoke();
 
         internal void OnLoaded(T loadedObj) => Loaded.SafeInvoke(loadedObj);
@@ -44,6 +43,5 @@ namespace SavesStuff.Advanced
             Deleted.SafeInvoke(deletedFileName);
             OnUpdated();
         }
-
     }
 }

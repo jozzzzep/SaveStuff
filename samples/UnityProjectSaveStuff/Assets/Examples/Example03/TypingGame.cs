@@ -21,11 +21,6 @@ namespace Examples.E03
             UpdateSlots();
         }
 
-        void Update()
-        {
-
-        }
-
         public void UpdateSlots()
         {
             var slotsState = slotSystem.GetSlotsState();

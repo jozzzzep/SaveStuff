@@ -19,16 +19,6 @@ namespace Examples.E01
             saveSystem = new EncryptedSaveSystem<E01SaveFile>(dirPath, "save", "datata");
         }
 
-        void Start()
-        {
-
-        }
-        
-        void Update()
-        {
-
-        }
-
         public void LoadData()
         {
             var loadedSave = saveSystem.Load(E01SaveFile.StaticName);

@@ -30,7 +30,6 @@ namespace SavesStuff.Advanced
                 action(args);
         }
 
-
         internal static void SafeInvoke<T>(this Action<T[]> action, T[] args)
             where T : class, ISaveable
         {

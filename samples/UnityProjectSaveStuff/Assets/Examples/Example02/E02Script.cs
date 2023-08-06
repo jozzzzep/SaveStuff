@@ -15,16 +15,6 @@ namespace Examples.E02
             saveFile = QuickSaveSystem.InitializeObject(saveFile);
         }
 
-        void Start()
-        {
-
-        }
-
-        void Update()
-        {
-
-        }
-
         public void LoadData()
         {
             saveFile = QuickSaveSystem.Load(saveFile);

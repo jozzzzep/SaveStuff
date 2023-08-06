@@ -27,22 +27,17 @@
         /// </summary>
         public SaveSystem<T> InternalSaveSystem { get; private set; }
 
-
         /// <inheritdoc cref="SaveSystem{T}.Events" />
         public SaveSystemEvents<T> Events  => InternalSaveSystem.Events;
-
 
         /// <inheritdoc cref="SaveSystem{T}.FileType" />
         public string FileType => InternalSaveSystem.FileType;
 
-
         /// <inheritdoc cref="SaveSystem{T}.DirectoryPath" />
         public string DirectoryPath => InternalSaveSystem.DirectoryPath;
 
-
         /// <inheritdoc cref="SaveSystem{T}.FilesPrefix" />
         public string FilesPrefix => InternalSaveSystem.FilesPrefix;
-
 
         /// <summary>
         /// The base constructor of a managed save system

@@ -73,7 +73,6 @@ namespace SavesStuff
         protected override T LoadByPathMethod(string filePath) =>
             StaticLoad(filePath);
 
-
         /// <summary>
         /// Will save a saveable object to a file and encrypt it
         /// </summary>
